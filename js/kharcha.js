@@ -23,8 +23,8 @@
 /* EXPENSES-START — this block is rewritten by the admin panel */
 const EXPENSES = {
   2023: [
-    { item: "डी.जे. (DJ)", amount: 5100, note: "₹4,600 जमा + ₹500 बाकी", show: true },
-    { item: "कपड़ा", amount: 1800, note: "₹1,300 + ₹500", show: true },
+    { item: "डी.जे. (DJ)", amount: 5100, note: "₹4,600 जमा + ₹500 बाकी", show: false },
+    { item: "कपड़ा", amount: 1800, note: "₹1,300 + ₹500", show: false },
     { item: "झंडी (2 किलो)", amount: 360, note: "", show: true },
     { item: "ठेला", amount: 200, note: "₹100 + ₹100", show: true },
     { item: "बैलून", amount: 200, note: "", show: true },
