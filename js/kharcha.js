@@ -23,14 +23,14 @@
 /* EXPENSES-START — this block is rewritten by the admin panel */
 const EXPENSES = {
   2023: [
-    { item: "डी.जे. (DJ)", amount: 5100, note: "₹4,600 जमा + ₹500 बाकी", show: true },
-    { item: "कपड़ा", amount: 1800, note: "₹1,300 + ₹500", show: true },
-    { item: "झंडी (2 किलो)", amount: 360, note: "", show: true },
-    { item: "ठेला", amount: 200, note: "₹100 + ₹100", show: true },
-    { item: "बैलून", amount: 200, note: "", show: true },
-    { item: "पेट्रोल", amount: 100, note: "दिगम्बर", show: true },
-    { item: "लाल झंडी", amount: 75, note: "", show: true },
-    { item: "काँटी + सुतली", amount: 75, note: "", show: true },
+    { item: "डी.जे. (DJ)", amount: 5100, note: "₹4,600 जमा + ₹500 बाकी", show: false },
+    { item: "कपड़ा", amount: 1800, note: "₹1,300 + ₹500", show: false },
+    { item: "झंडी (2 किलो)", amount: 360, note: "", show: false },
+    { item: "ठेला", amount: 200, note: "₹100 + ₹100", show: false },
+    { item: "बैलून", amount: 200, note: "", show: false },
+    { item: "पेट्रोल", amount: 100, note: "दिगम्बर", show: false },
+    { item: "लाल झंडी", amount: 75, note: "", show: false },
+    { item: "काँटी + सुतली", amount: 75, note: "", show: false },
     { item: "पेट्रोल", amount: 25, note: "अनिल", show: true },
     { item: "अन्य खर्च", amount: 500, note: "विवरण पर्ची में नहीं लिखा", show: true },
     { item: "अन्य खर्च", amount: 20, note: "विवरण पर्ची में नहीं लिखा", show: true },
