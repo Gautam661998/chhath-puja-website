@@ -1,0 +1,1337 @@
+/* ==========================================================================
+   Village Chhath Puja Website — style.css
+   Shared by index.html, donation.html and admin.html
+
+   Contents
+   1.  Design tokens (colours, fonts, sizes)
+   2.  Base / reset
+   3.  Layout helpers
+   4.  Header, navigation and toran (marigold garland) divider
+   5.  Buttons
+   6.  Home: hero
+   7.  Home: introduction, four-day rituals, gallery, community
+   8.  Inner page banner (donation + admin)
+   9.  Stats, tables and filters
+   10. Forms and admin panel
+   11. Lightbox, toast, footer
+   12. Responsive rules
+   13. Reduced motion
+   ========================================================================== */
+
+/* 1. DESIGN TOKENS ------------------------------------------------------- */
+:root {
+  --sindoor: #b3261e;
+  /* deep red: primary buttons, headings */
+  --sindoor-dark: #8f1d17;
+  --saffron: #e8731a;
+  /* main festival orange */
+  --marigold: #f5a623;
+  /* garland yellow-orange */
+  --turmeric: #ffd25e;
+  /* light yellow highlights */
+  --paper: #fff4df;
+  /* page background */
+  --paper-deep: #fbe4ba;
+  /* soft panels */
+  --river: #1e2a4a;
+  /* evening river: dark bands, footer */
+  --river-light: #2d3b63;
+  --ink: #3a1c0c;
+  /* body text */
+  --ink-soft: #6b4426;
+  /* secondary text */
+  --white: #ffffff;
+  --line: rgba(58, 28, 12, 0.16);
+  --success: #2f6b2a;
+
+  --font-display: "Yatra One", "Noto Sans Devanagari", "Mangal", Georgia, serif;
+  --font-body: "Mukta", "Noto Sans Devanagari", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+
+  --step--1: 0.875rem;
+  --step-0: 1.0625rem;
+  --step-1: 1.3rem;
+  --step-2: clamp(1.6rem, 1.3rem + 1.2vw, 2.1rem);
+  --step-3: clamp(2rem, 1.5rem + 2.4vw, 3rem);
+  --step-hero: clamp(3.2rem, 1.6rem + 8vw, 8rem);
+
+  --radius-small: 6px;
+  --radius-medium: 14px;
+  --radius-large: 28px;
+
+  --container: 1140px;
+  --shadow-warm: 0 10px 30px -12px rgba(122, 52, 10, 0.35);
+}
+
+/* 2. BASE / RESET ------------------------------------------------------- */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 90px;
+  /* keeps anchored sections clear of the sticky header */
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-body);
+  font-size: var(--step-0);
+  line-height: 1.65;
+  color: var(--ink);
+  background: var(--paper);
+  -webkit-font-smoothing: antialiased;
+}
+
+img {
+  max-width: 100%;
+  display: block;
+}
+
+h1,
+h2,
+h3 {
+  font-family: var(--font-display);
+  font-weight: 400;
+  line-height: 1.2;
+  margin: 0 0 0.5em;
+  color: var(--sindoor);
+}
+
+h2 {
+  font-size: var(--step-3);
+}
+
+h3 {
+  font-size: var(--step-1);
+}
+
+p {
+  margin: 0 0 1em;
+}
+
+a {
+  color: var(--sindoor);
+}
+
+:focus-visible {
+  outline: 3px solid var(--marigold);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+.skip-link {
+  position: absolute;
+  left: 1rem;
+  top: -100px;
+  z-index: 200;
+  padding: 0.6rem 1rem;
+  background: var(--river);
+  color: var(--white);
+  border-radius: var(--radius-small);
+}
+
+.skip-link:focus {
+  top: 1rem;
+}
+
+.visually-hidden {
+  position: absolute !important;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+[hidden] {
+  display: none !important;
+}
+
+/* 3. LAYOUT HELPERS ----------------------------------------------------- */
+.container {
+  width: min(100% - 2.5rem, var(--container));
+  margin-inline: auto;
+}
+
+.section {
+  padding-block: clamp(3.5rem, 8vw, 6rem);
+}
+
+.section-intro {
+  max-width: 62ch;
+  margin-bottom: 2.5rem;
+  color: var(--ink-soft);
+}
+
+/* 4. HEADER, NAVIGATION, TORAN ----------------------------------------- */
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: var(--paper);
+}
+
+.header-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  min-height: 72px;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  text-decoration: none;
+  color: var(--ink);
+}
+
+.brand-sun {
+  width: 44px;
+  height: 44px;
+  flex-shrink: 0;
+}
+
+.brand-text {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.15;
+}
+
+.brand-village {
+  font-family: var(--font-display);
+  font-size: 1.35rem;
+  color: var(--sindoor);
+}
+
+.brand-samiti {
+  font-size: var(--step--1);
+  color: var(--ink-soft);
+}
+
+.site-nav ul {
+  display: flex;
+  gap: 0.25rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.site-nav a {
+  display: block;
+  padding: 0.5rem 0.9rem;
+  border-radius: 999px;
+  text-decoration: none;
+  font-weight: 500;
+  color: var(--ink);
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.site-nav a:hover {
+  background: var(--paper-deep);
+}
+
+.site-nav a[aria-current="page"] {
+  background: var(--sindoor);
+  color: var(--white);
+}
+
+.nav-toggle {
+  display: none;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 0.9rem;
+  border: 2px solid var(--sindoor);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--sindoor);
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.nav-toggle-bars,
+.nav-toggle-bars::before,
+.nav-toggle-bars::after {
+  display: block;
+  width: 18px;
+  height: 2px;
+  background: currentColor;
+  border-radius: 2px;
+  transition: transform 0.2s ease;
+}
+
+.nav-toggle-bars {
+  position: relative;
+}
+
+.nav-toggle-bars::before,
+.nav-toggle-bars::after {
+  content: "";
+  position: absolute;
+  left: 0;
+}
+
+.nav-toggle-bars::before {
+  top: -6px;
+}
+
+.nav-toggle-bars::after {
+  top: 6px;
+}
+
+.nav-toggle[aria-expanded="true"] .nav-toggle-bars {
+  background: transparent;
+}
+
+.nav-toggle[aria-expanded="true"] .nav-toggle-bars::before {
+  transform: translateY(6px) rotate(45deg);
+}
+
+.nav-toggle[aria-expanded="true"] .nav-toggle-bars::after {
+  transform: translateY(-6px) rotate(-45deg);
+}
+
+/* Toran: a strip of alternating marigold and saffron flowers,
+   like the garlands hung over doorways and ghats during the festival. */
+.toran {
+  height: 14px;
+  background:
+    radial-gradient(circle at 8px 4px, var(--marigold) 6px, transparent 6.5px) 0 0 / 32px 14px repeat-x,
+    radial-gradient(circle at 24px 4px, var(--saffron) 6px, transparent 6.5px) 0 0 / 32px 14px repeat-x,
+    linear-gradient(var(--sindoor), var(--sindoor)) 0 3px / 100% 2px no-repeat;
+}
+
+/* 5. BUTTONS ------------------------------------------------------------ */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  min-height: 46px;
+  padding: 0.6rem 1.4rem;
+  border: 2px solid transparent;
+  border-radius: 999px;
+  font: inherit;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+}
+
+.btn-primary {
+  background: var(--sindoor);
+  color: var(--white);
+}
+
+.btn-primary:hover {
+  background: var(--sindoor-dark);
+}
+
+.btn-gold {
+  background: var(--marigold);
+  color: var(--ink);
+}
+
+.btn-gold:hover {
+  background: var(--turmeric);
+}
+
+.btn-outline {
+  background: transparent;
+  border-color: var(--sindoor);
+  color: var(--sindoor);
+}
+
+.btn-outline:hover {
+  background: var(--paper-deep);
+}
+
+.btn-light-outline {
+  background: transparent;
+  border-color: rgba(255, 255, 255, 0.7);
+  color: var(--white);
+}
+
+.btn-light-outline:hover {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.btn-small {
+  min-height: 36px;
+  padding: 0.3rem 0.9rem;
+  font-size: var(--step--1);
+}
+
+.btn-danger {
+  background: transparent;
+  border-color: var(--sindoor);
+  color: var(--sindoor);
+}
+
+.btn-danger:hover {
+  background: var(--sindoor);
+  color: var(--white);
+}
+
+.btn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+/* 6. HOME: HERO ----------------------------------------------------------- */
+.hero {
+  position: relative;
+  min-height: min(88vh, 820px);
+  display: grid;
+  align-items: end;
+  overflow: hidden;
+  color: var(--white);
+  background: var(--river);
+}
+
+.hero-image {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Darkens the lower part of the photo so the text stays readable */
+.hero::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(20, 16, 40, 0.88) 0%, rgba(20, 16, 40, 0.45) 45%, rgba(20, 16, 40, 0) 75%);
+}
+
+.hero-content {
+  position: relative;
+  z-index: 1;
+  padding-block: 4rem 4.5rem;
+  animation: hero-rise 1.4s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+
+.hero-place {
+  font-size: var(--step-1);
+  font-weight: 500;
+  color: var(--turmeric);
+  margin-bottom: 0.25rem;
+}
+
+.hero-title {
+  font-size: var(--step-hero);
+  line-height: 1.05;
+  color: #ffe7a8;
+  margin: 0 0 0.3em;
+  text-shadow: 0 4px 30px rgba(232, 115, 26, 0.55);
+}
+
+.hero-text {
+  max-width: 52ch;
+  font-size: var(--step-1);
+  line-height: 1.55;
+  color: rgba(255, 255, 255, 0.92);
+}
+
+.hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-top: 1.75rem;
+}
+
+@keyframes hero-rise {
+  from {
+    opacity: 0;
+    transform: translateY(40px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* 7. HOME SECTIONS ------------------------------------------------------- */
+
+/* Introduction: two columns of text */
+.intro-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: clamp(2rem, 5vw, 4.5rem);
+}
+
+.intro-grid p {
+  max-width: 60ch;
+}
+
+.intro-highlight {
+  padding: 1.75rem;
+  border-radius: var(--radius-large) var(--radius-small) var(--radius-large) var(--radius-small);
+  background: var(--paper-deep);
+  border-left: 6px solid var(--saffron);
+}
+
+.intro-highlight h3 {
+  margin-top: 0;
+}
+
+/* Four days of Chhath: a real sequence, so the days are numbered */
+.rituals {
+  background: var(--white);
+  border-block: 1px solid var(--line);
+}
+
+.ritual-steps {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  counter-reset: day;
+}
+
+.ritual-step {
+  position: relative;
+  padding: 2.75rem 1.5rem 0 0;
+  counter-increment: day;
+}
+
+/* The line linking the four days */
+.ritual-step::before {
+  content: "";
+  position: absolute;
+  top: 18px;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: var(--marigold);
+}
+
+/* The numbered dot on the line */
+.ritual-step::after {
+  content: counter(day);
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 38px;
+  height: 38px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--saffron);
+  color: var(--white);
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  box-shadow: 0 0 0 5px var(--white);
+}
+
+.ritual-step:last-child::before {
+  right: auto;
+  width: 38px;
+}
+
+.ritual-name {
+  font-family: var(--font-display);
+  font-size: var(--step-1);
+  color: var(--sindoor);
+  margin-bottom: 0.1rem;
+}
+
+.ritual-hindi {
+  display: block;
+  font-size: var(--step--1);
+  color: var(--ink-soft);
+  margin-bottom: 0.6rem;
+}
+
+.ritual-step p {
+  font-size: 0.98rem;
+  color: var(--ink-soft);
+}
+
+/* Gallery */
+.gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-auto-rows: 220px;
+  gap: 0.9rem;
+}
+
+.gallery-item {
+  margin: 0;
+  position: relative;
+  border-radius: var(--radius-medium);
+  overflow: hidden;
+  background: var(--paper-deep);
+}
+
+.gallery-item.is-wide {
+  grid-column: span 2;
+}
+
+.gallery-item.is-tall {
+  grid-row: span 2;
+}
+
+.gallery-open {
+  display: block;
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: zoom-in;
+}
+
+.gallery-open img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.4s ease;
+}
+
+.gallery-open:hover img {
+  transform: scale(1.04);
+}
+
+.gallery-item figcaption {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding: 1.5rem 1rem 0.7rem;
+  background: linear-gradient(to top, rgba(20, 16, 40, 0.8), transparent);
+  color: var(--white);
+  font-size: var(--step--1);
+  pointer-events: none;
+}
+
+/* Shown in place of a gallery photo that has not been added yet */
+.photo-placeholder {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
+  padding: 1rem;
+  text-align: center;
+  color: var(--ink-soft);
+  background:
+    repeating-linear-gradient(45deg, rgba(245, 166, 35, 0.12) 0 12px, transparent 12px 24px),
+    var(--paper-deep);
+  border: 2px dashed rgba(179, 38, 30, 0.35);
+  border-radius: inherit;
+}
+
+.photo-placeholder strong {
+  color: var(--sindoor);
+  font-weight: 600;
+}
+
+.photo-placeholder code {
+  font-size: 0.8rem;
+  background: rgba(255, 255, 255, 0.7);
+  padding: 0.1rem 0.4rem;
+  border-radius: 4px;
+}
+
+.gallery-item.is-empty figcaption {
+  display: none;
+}
+
+/* Community participation band */
+.community {
+  background: var(--river);
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.community h2 {
+  color: var(--turmeric);
+}
+
+.community .section-intro {
+  color: rgba(255, 255, 255, 0.78);
+}
+
+.community-grid {
+  display: grid;
+  grid-template-columns: 1.3fr 1fr;
+  gap: clamp(2rem, 5vw, 4rem);
+  align-items: start;
+}
+
+.ways-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 1.25rem;
+}
+
+.ways-list li {
+  padding-left: 1.5rem;
+  border-left: 3px solid var(--marigold);
+}
+
+.ways-list h3 {
+  color: var(--white);
+  margin-bottom: 0.2rem;
+}
+
+.ways-list p {
+  margin: 0;
+  color: rgba(255, 255, 255, 0.75);
+}
+
+.donation-callout {
+  padding: 2rem;
+  border-radius: var(--radius-large);
+  background: var(--river-light);
+  border: 1px solid rgba(255, 210, 94, 0.3);
+}
+
+.donation-callout h3 {
+  color: var(--turmeric);
+}
+
+.callout-figure {
+  font-family: var(--font-display);
+  font-size: var(--step-3);
+  color: var(--white);
+  line-height: 1.1;
+  margin: 0.25rem 0 0.25rem;
+}
+
+.callout-note {
+  color: rgba(255, 255, 255, 0.72);
+  font-size: var(--step--1);
+}
+
+/* 8. INNER PAGE BANNER --------------------------------------------------- */
+.page-banner {
+  background: var(--river);
+  color: rgba(255, 255, 255, 0.85);
+  padding-block: clamp(2.5rem, 6vw, 4rem);
+}
+
+.page-banner h1 {
+  font-size: var(--step-3);
+  color: var(--turmeric);
+  margin-bottom: 0.3rem;
+}
+
+.page-banner p {
+  max-width: 60ch;
+  margin: 0;
+}
+
+/* 9. STATS, TABLES, FILTERS ---------------------------------------------- */
+.toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: end;
+  gap: 1rem;
+  margin-bottom: 1.75rem;
+}
+
+.toolbar .field {
+  margin: 0;
+}
+
+.toolbar-spacer {
+  flex: 1;
+}
+
+.stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.stat {
+  padding: 1.25rem 1.5rem;
+  background: var(--white);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-medium);
+}
+
+.stat:first-child {
+  background: var(--sindoor);
+  border-color: var(--sindoor);
+  color: var(--white);
+}
+
+.stat-label {
+  display: block;
+  font-size: var(--step--1);
+  color: var(--ink-soft);
+}
+
+.stat:first-child .stat-label {
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.stat-value {
+  display: block;
+  font-family: var(--font-display);
+  font-size: var(--step-2);
+  line-height: 1.2;
+  margin-top: 0.2rem;
+}
+
+.table-caption-row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.table-caption-row h2 {
+  font-size: var(--step-2);
+  margin: 0;
+}
+
+.result-count {
+  color: var(--ink-soft);
+  font-size: var(--step--1);
+}
+
+.table-wrap {
+  overflow-x: auto;
+  background: var(--white);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-medium);
+}
+
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 1rem;
+}
+
+.data-table th,
+.data-table td {
+  padding: 0.8rem 1rem;
+  text-align: left;
+  border-bottom: 1px solid var(--line);
+  vertical-align: middle;
+}
+
+.data-table thead th {
+  background: var(--paper-deep);
+  color: var(--ink);
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.data-table tbody tr:nth-child(even) {
+  background: #fffaf0;
+}
+
+.data-table tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+.data-table .num {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.data-table tfoot td {
+  font-weight: 700;
+  background: var(--paper-deep);
+  border-top: 2px solid var(--saffron);
+  border-bottom: 0;
+}
+
+.row-actions {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: flex-end;
+}
+
+.empty-row td {
+  text-align: center;
+  padding: 2.5rem 1rem;
+  color: var(--ink-soft);
+}
+
+.storage-note {
+  margin-top: 1.5rem;
+  padding: 1rem 1.25rem;
+  border-radius: var(--radius-medium);
+  background: var(--paper-deep);
+  color: var(--ink-soft);
+  font-size: var(--step--1);
+}
+
+/* 10. FORMS AND ADMIN ---------------------------------------------------- */
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  margin-bottom: 1.1rem;
+}
+
+.field label {
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+.field input,
+.field select {
+  min-height: 46px;
+  padding: 0.55rem 0.85rem;
+  border: 2px solid var(--line);
+  border-radius: var(--radius-small);
+  background: var(--white);
+  color: var(--ink);
+  font: inherit;
+}
+
+.field input:focus,
+.field select:focus {
+  border-color: var(--saffron);
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(245, 166, 35, 0.35);
+}
+
+.field input.is-invalid,
+.field select.is-invalid {
+  border-color: var(--sindoor);
+}
+
+.field-hint {
+  font-size: var(--step--1);
+  color: var(--ink-soft);
+}
+
+.field-error {
+  min-height: 1.2em;
+  font-size: var(--step--1);
+  color: var(--sindoor);
+  font-weight: 600;
+}
+
+.field-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0 1rem;
+}
+
+.login-card {
+  max-width: 420px;
+  margin: 0 auto;
+  padding: 2rem;
+  background: var(--white);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-large);
+  box-shadow: var(--shadow-warm);
+}
+
+.login-card h2 {
+  font-size: var(--step-2);
+}
+
+.form-message {
+  margin: 0 0 1rem;
+  font-weight: 600;
+  color: var(--sindoor);
+}
+
+.admin-layout {
+  display: grid;
+  grid-template-columns: minmax(280px, 380px) 1fr;
+  gap: 2rem;
+  align-items: start;
+}
+
+.panel {
+  padding: 1.75rem;
+  background: var(--white);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-medium);
+}
+
+.panel h2 {
+  font-size: var(--step-2);
+}
+
+.panel-sticky {
+  position: sticky;
+  top: 100px;
+}
+
+.panel.is-editing {
+  border-color: var(--saffron);
+  box-shadow: 0 0 0 3px rgba(245, 166, 35, 0.35);
+}
+
+.form-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.admin-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.admin-bar p {
+  margin: 0;
+}
+
+.admin-section+.admin-section {
+  margin-top: 2.5rem;
+}
+
+.danger-zone {
+  margin-top: 2.5rem;
+  padding: 1.25rem 1.5rem;
+  border: 2px dashed rgba(179, 38, 30, 0.4);
+  border-radius: var(--radius-medium);
+}
+
+.danger-zone h3 {
+  font-size: 1.1rem;
+}
+
+.danger-zone p {
+  color: var(--ink-soft);
+  font-size: var(--step--1);
+}
+
+/* 11. LIGHTBOX, TOAST, FOOTER ------------------------------------------- */
+.lightbox {
+  max-width: min(92vw, 1000px);
+  padding: 0;
+  border: 0;
+  border-radius: var(--radius-medium);
+  background: var(--river);
+  color: var(--white);
+}
+
+.lightbox::backdrop {
+  background: rgba(15, 12, 30, 0.85);
+}
+
+.lightbox img {
+  max-height: 78vh;
+  width: 100%;
+  object-fit: contain;
+}
+
+.lightbox-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.75rem 1rem;
+}
+
+.lightbox-bar p {
+  margin: 0;
+}
+
+.toast {
+  position: fixed;
+  left: 50%;
+  bottom: 1.5rem;
+  z-index: 300;
+  max-width: calc(100% - 2rem);
+  padding: 0.85rem 1.4rem;
+  border-radius: 999px;
+  background: var(--river);
+  color: var(--white);
+  font-weight: 600;
+  box-shadow: var(--shadow-warm);
+  transform: translate(-50%, 150%);
+  opacity: 0;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+.toast.is-visible {
+  transform: translate(-50%, 0);
+  opacity: 1;
+}
+
+.toast.is-error {
+  background: var(--sindoor);
+}
+
+.toast.is-success {
+  background: var(--success);
+}
+
+.site-footer {
+  background: #151d36;
+  color: rgba(255, 255, 255, 0.75);
+  padding-block: 2.5rem 2rem;
+  font-size: var(--step--1);
+}
+
+.footer-inner {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 1.5rem;
+}
+
+.footer-title {
+  font-family: var(--font-display);
+  font-size: 1.4rem;
+  color: var(--turmeric);
+  margin-bottom: 0.2rem;
+}
+
+.footer-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1.25rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.footer-links a {
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.footer-links a:hover {
+  color: var(--turmeric);
+}
+
+.footer-bottom {
+  margin-top: 1.75rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+/* 12. RESPONSIVE --------------------------------------------------------- */
+@media (max-width: 960px) {
+  .ritual-steps {
+    grid-template-columns: 1fr 1fr;
+    row-gap: 2rem;
+  }
+
+  .ritual-step:nth-child(2)::before,
+  .ritual-step:last-child::before {
+    right: auto;
+    width: 38px;
+  }
+
+  .admin-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .panel-sticky {
+    position: static;
+  }
+
+  .community-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 760px) {
+
+  /* Mobile navigation: collapsible menu */
+  .nav-toggle {
+    display: inline-flex;
+  }
+
+  .site-nav {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: var(--paper);
+    border-bottom: 3px solid var(--marigold);
+    box-shadow: var(--shadow-warm);
+    display: none;
+  }
+
+  .site-nav.is-open {
+    display: block;
+  }
+
+  .site-nav ul {
+    flex-direction: column;
+    padding: 0.75rem 1.25rem 1.25rem;
+  }
+
+  .site-nav a {
+    padding: 0.75rem 1rem;
+    border-radius: var(--radius-small);
+  }
+
+  .brand-samiti {
+    display: none;
+  }
+
+  .intro-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .gallery-grid {
+    grid-template-columns: 1fr 1fr;
+    grid-auto-rows: 170px;
+  }
+
+  .gallery-item.is-wide {
+    grid-column: span 2;
+  }
+
+  .stats {
+    grid-template-columns: 1fr;
+  }
+
+  .field-row {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 640px) {
+  .ritual-steps {
+    grid-template-columns: 1fr;
+  }
+
+  .ritual-step::before {
+    display: none;
+  }
+
+  .ritual-step {
+    padding: 0 0 0 3.5rem;
+  }
+
+  /* Tables turn into stacked cards on phones */
+  .data-table thead {
+    display: none;
+  }
+
+  .data-table,
+  .data-table tbody,
+  .data-table tfoot,
+  .data-table tr,
+  .data-table td {
+    display: block;
+    width: 100%;
+  }
+
+  .data-table tr {
+    padding: 0.6rem 0.25rem;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .data-table td {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 0.35rem 0.85rem;
+    border: 0;
+    text-align: right;
+  }
+
+  .data-table td::before {
+    content: attr(data-label);
+    font-weight: 600;
+    color: var(--ink-soft);
+    text-align: left;
+  }
+
+  .data-table .num {
+    text-align: right;
+  }
+
+  .data-table tfoot td {
+    border-top: 0;
+  }
+
+  .data-table tfoot tr {
+    border-top: 2px solid var(--saffron);
+  }
+
+  .empty-row td {
+    justify-content: center;
+    text-align: center;
+  }
+
+  .empty-row td::before {
+    display: none;
+  }
+
+  .row-actions {
+    justify-content: flex-end;
+  }
+
+  .row-actions::before {
+    display: none;
+  }
+
+  .toolbar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}
+
+/* 13. REDUCED MOTION ---------------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* ==========================================================================
+   POSTER HERO — shows the full main photo with nothing cut,
+   with the text and buttons in a band below it
+   ========================================================================== */
+.hero.hero--poster {
+  display: block;
+  min-height: 0;
+}
+
+.hero--poster .hero-image {
+  position: static;
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+}
+
+/* No dark shading over the poster */
+.hero--poster::after {
+  display: none;
+}
+
+.hero--poster .hero-content {
+  padding-block: 1.75rem 2.25rem;
+}
+
+.hero--poster .hero-text {
+  margin-bottom: 0;
+}

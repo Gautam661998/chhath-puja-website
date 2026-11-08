@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en-IN">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Donation Records | Chhath Puja, Shreepur Parsa</title>
+  <meta name="description"
+    content="Year-wise donation records of our village Chhath Puja Samiti: total collection, number of donors and the full donor list.">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Mukta:wght@400;500;600;700&family=Yatra+One&display=swap"
+    rel="stylesheet">
+
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/extra.css">
+</head>
+
+<body data-page="donations">
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <!-- ===================== HEADER ===================== -->
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="brand" href="index.html" aria-label="Home">
+        <svg class="brand-sun" viewBox="0 0 48 48" aria-hidden="true">
+          <g stroke="#e8731a" stroke-width="3" stroke-linecap="round">
+            <line x1="24" y1="3" x2="24" y2="9" />
+            <line x1="24" y1="39" x2="24" y2="45" />
+            <line x1="3" y1="24" x2="9" y2="24" />
+            <line x1="39" y1="24" x2="45" y2="24" />
+            <line x1="9" y1="9" x2="13" y2="13" />
+            <line x1="35" y1="35" x2="39" y2="39" />
+            <line x1="39" y1="9" x2="35" y2="13" />
+            <line x1="13" y1="35" x2="9" y2="39" />
+          </g>
+          <circle cx="24" cy="24" r="10" fill="#f5a623" stroke="#b3261e" stroke-width="2" />
+        </svg>
+        <span class="brand-text">
+          <span class="brand-village" data-config="villageName">Shreepur Parsa</span>
+          <span class="brand-samiti" data-config="samitiName">Shri Chhath Puja Samiti, Shreepur Parsa</span>
+        </span>
+      </a>
+
+      <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav">
+        <span class="nav-toggle-bars" aria-hidden="true"></span>
+        Menu
+      </button>
+
+      <nav class="site-nav" id="site-nav" aria-label="Main">
+        <ul>
+          <li><a href="index.html" data-nav="home">Home</a></li>
+          <li><a href="index.html#rituals">Rituals</a></li>
+          <li><a href="index.html#gallery">Gallery</a></li>
+          <li><a href="donation.html" data-nav="donations">Donations</a></li>
+        </ul>
+      </nav>
+    </div>
+    <div class="toran" aria-hidden="true"></div>
+  </header>
+
+  <main id="main">
+    <section class="page-banner" aria-labelledby="page-title">
+      <div class="container">
+        <h1 id="page-title">Donation records</h1>
+        <p>Every contribution to the Samiti, listed year by year so the whole village can see how the festival is
+          funded.</p>
+      </div>
+    </section>
+
+    <!-- ===================== DONATE WITH UPI =====================
+         QR code image: save your Samiti's UPI QR as images/upi-qr.jpg
+         UPI ID, payee name and WhatsApp number: set them at the top of js/donation.js -->
+    <section class="section donate-section" id="donate" aria-labelledby="donate-title">
+      <div class="container donate-grid">
+        <div class="donate-text">
+          <h2 id="donate-title" lang="hi">UPI से दान करें</h2>
+          <p lang="hi">PhonePe, Google Pay, Paytm या किसी भी UPI ऐप से सीधे समिति को दान करें। आपका हर एक रुपया घाट पर
+            छठ पूजा की व्यवस्था में लगाया जाएगा।</p>
+          <div class="upi-id-row" id="upiIdRow">
+            <span class="upi-label">UPI ID</span>
+            <code class="upi-id" id="upiIdText"></code>
+            <button class="btn btn-outline btn-small" id="copyUpiBtn" type="button">Copy UPI ID</button>
+          </div>
+          <p class="upi-payee">Account name: <strong id="upiNameText"></strong></p>
+
+          <div class="mobile-pay" id="mobilePay">
+            <p class="upi-label" id="amountLabel">Choose an amount (optional)</p>
+            <div class="donate-amounts" id="donateAmounts" role="group" aria-labelledby="amountLabel"></div>
+            <a class="btn btn-primary" id="upiPayLink" href="#">Pay with UPI app</a>
+            <p class="field-hint">If your app shows an error, scan the QR code or pay to the UPI ID instead.</p>
+          </div>
+          <p class="field-hint" id="desktopHint" hidden>On a computer? Scan the QR code with your phone’s UPI app.</p>
+
+          <h3 class="donate-steps-title" lang="hi">भुगतान करने के बाद</h3>
+          <ol class="donate-steps" lang="hi">
+            <li>भुगतान का स्क्रीनशॉट लें।</li>
+            <li>स्क्रीनशॉट और अपना नाम समिति को भेजें।</li>
+            <li>आपका नाम नीचे दी गई दान सूची में जोड़ दिया जाएगा।</li>
+          </ol>
+          <a class="btn btn-gold" id="whatsappLink" href="#" target="_blank" rel="noopener" lang="hi" hidden>स्क्रीनशॉट
+            WhatsApp पर भेजें</a>
+        </div>
+
+        <figure class="upi-qr">
+          <img src="images/upi-qr.jpg" alt="UPI QR code of the Chhath Puja Samiti" data-placeholder>
+          <figcaption>Scan with any UPI app</figcaption>
+          <a class="btn btn-outline btn-small" href="images/upi-qr.jpg" download="Chhath-Puja-UPI-QR.jpg"
+            style="margin-top: 0.75rem;">Download QR code</a>
+          <p class="field-hint" style="margin-top: 0.75rem;">On a phone? Download the QR, then in PhonePe or Google Pay
+            tap Scan and choose it from your gallery.</p>
+        </figure>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container">
+
+        <!-- Filters -->
+        <div class="toolbar">
+          <div class="field">
+            <label for="yearSelect">Chhath Puja year</label>
+            <select id="yearSelect"></select>
+          </div>
+          <div class="field">
+            <label for="searchInput">Find a donor</label>
+            <input id="searchInput" type="search" placeholder="Type a name" autocomplete="off">
+          </div>
+          <span class="toolbar-spacer"></span>
+          <button class="btn btn-outline" id="exportBtn" type="button">Download CSV</button>
+        </div>
+
+        <!-- Year summary -->
+        <div class="stats" aria-live="polite">
+          <div class="stat">
+            <span class="stat-label">Total collection <span id="statYearLabel"></span></span>
+            <span class="stat-value" id="statTotal">₹0</span>
+          </div>
+          <div class="stat">
+            <span class="stat-label">Total donors</span>
+            <span class="stat-value" id="statCount">0</span>
+          </div>
+          <div class="stat">
+            <span class="stat-label">Highest donation</span>
+            <span class="stat-value" id="statHighest">₹0</span>
+          </div>
+        </div>
+
+        <!-- Donor list -->
+        <div class="table-caption-row">
+          <h2 id="tableTitle">Donor list</h2>
+          <span class="result-count" id="resultCount"></span>
+        </div>
+
+        <div class="table-wrap">
+          <table class="data-table" aria-labelledby="tableTitle">
+            <thead>
+              <tr>
+                <th scope="col">#</th>
+                <th scope="col">Donor name</th>
+                <th scope="col" class="num">Amount</th>
+                <th scope="col">Date</th>
+              </tr>
+            </thead>
+            <tbody id="donationBody">
+              <tr class="empty-row">
+                <td colspan="4">Loading donation records…</td>
+              </tr>
+            </tbody>
+            <tfoot id="donationFoot"></tfoot>
+          </table>
+        </div>
+
+        <p class="storage-note">
+          These records are saved in this browser (LocalStorage) for now. Records added on another
+          phone or computer will appear here only after the Samiti connects an online database.
+        </p>
+      </div>
+    </section>
+  </main>
+
+  <!-- ===================== FOOTER ===================== -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-inner">
+        <div>
+          <p class="footer-title"><span data-config="villageName">Shreepur Parsa</span> Chhath Puja</p>
+          <p><span data-config="samitiName">Shri Chhath Puja Samiti, Shreepur Parsa</span>, <span
+              data-config="district">Bhojpur, Bihar</span></p>
+        </div>
+        <ul class="footer-links">
+          <li><a href="index.html">Home</a></li>
+          <li><a href="index.html#gallery">Gallery</a></li>
+          <li><a href="donation.html">Donation records</a></li>
+          <li><a href="admin.html">Admin</a></li>
+        </ul>
+      </div>
+      <p class="footer-bottom">
+        © <span data-current-year>2026</span> <span data-config="samitiName">Shri Chhath Puja Samiti, Shreepur
+          Parsa</span>. All rights reserved.
+        <span lang="hi">जय छठी मईया।</span>
+      </p>
+    </div>
+  </footer>
+
+  <script src="js/main.js" defer></script>
+  <script src="js/donation.js" defer></script>
+  <script src="js/hindi.js" defer></script>
+  <script src="js/kharcha.js" defer></script>
+</body>
+
+</html>

@@ -1,0 +1,383 @@
+/* extra.css — styles for Hindi tools, import/publish and kharcha.
+   Linked from admin.html and donation.html after style.css. */
+
+/* ==========================================================================
+   HINDI TOOLS (admin.html): English → Hindi names, import, publish
+   ========================================================================== */
+.tools-panel {
+  margin-bottom: 2rem;
+}
+
+.tools-grid {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  gap: 2rem;
+  align-items: start;
+}
+
+.tools-panel h2 {
+  font-size: var(--step-2);
+}
+
+.publish-box {
+  padding: 1.25rem 1.5rem;
+  border-radius: var(--radius-medium);
+  background: var(--paper-deep);
+  border-left: 5px solid var(--sindoor);
+}
+
+.publish-steps {
+  padding-left: 1.25rem;
+  font-size: 0.95rem;
+  color: var(--ink-soft);
+}
+
+.publish-steps li { margin-bottom: 0.3rem; }
+
+.check-field {
+  justify-content: flex-end;
+}
+
+.check-field label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-height: 46px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.check-field input {
+  width: 20px;
+  height: 20px;
+  min-height: 0;
+  accent-color: var(--sindoor);
+}
+
+.field input[type="file"] {
+  padding: 0.5rem;
+  background: var(--paper);
+  cursor: pointer;
+}
+
+/* Import preview */
+.import-preview {
+  margin-top: 2rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--line);
+}
+
+.import-table input.import-name {
+  width: 100%;
+  min-width: 140px;
+  min-height: 38px;
+  padding: 0.3rem 0.6rem;
+  border: 2px solid var(--line);
+  border-radius: var(--radius-small);
+  font: inherit;
+  background: var(--white);
+}
+
+.import-table input.import-name:focus {
+  border-color: var(--saffron);
+  outline: none;
+}
+
+.import-ok .import-status { color: var(--success); font-weight: 600; }
+.import-error .import-status { color: var(--sindoor); font-weight: 600; }
+.import-duplicate .import-status { color: var(--ink-soft); }
+.import-table tr.import-error { background: #fdecea !important; }
+.import-table tr.import-duplicate { opacity: 0.7; }
+
+.import-table td:nth-child(5) { white-space: nowrap; }
+
+.import-actions {
+  margin-top: 1.25rem;
+}
+
+/* Hindi name suggestions under the name box */
+.hindi-suggestions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.hindi-suggestions:empty { display: none; }
+
+.hindi-chip {
+  min-height: 34px;
+  padding: 0.2rem 0.8rem;
+  border: 2px solid var(--marigold);
+  border-radius: 999px;
+  background: var(--white);
+  color: var(--ink);
+  font: inherit;
+  font-size: 0.95rem;
+  cursor: pointer;
+}
+
+.hindi-chip:hover { background: var(--paper-deep); }
+
+@media (max-width: 960px) {
+  .tools-grid { grid-template-columns: 1fr; }
+  .check-field { justify-content: flex-start; }
+}
+
+/* ==========================================================================
+   खर्चा कितना हुआ (donation.html)
+   ========================================================================== */
+.kharcha-section {
+  background: var(--white);
+  border-top: 1px solid var(--line);
+}
+
+.kharcha-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.kharcha-stat {
+  padding: 1.25rem 1.5rem;
+  border-radius: var(--radius-medium);
+  background: var(--paper);
+  border: 1px solid var(--line);
+}
+
+.kharcha-stat .stat-value {
+  display: block;
+  font-family: var(--font-display);
+  font-size: var(--step-2);
+  line-height: 1.2;
+  margin-top: 0.2rem;
+}
+
+.kharcha-stat.is-spent {
+  background: var(--sindoor);
+  border-color: var(--sindoor);
+  color: var(--white);
+}
+
+.kharcha-stat.is-spent .stat-label { color: rgba(255, 255, 255, 0.85); }
+
+.kharcha-stat.is-left {
+  background: #eaf5e7;
+  border-color: #b9dbb2;
+}
+
+.kharcha-stat.is-left .stat-value { color: var(--success); }
+
+.kharcha-stat.is-loss .stat-value { color: var(--sindoor); }
+
+.kharcha-subtitle {
+  font-size: var(--step-1);
+  margin: 0;
+}
+
+.kharcha-share-col { min-width: 150px; }
+
+.kharcha-bar {
+  display: inline-block;
+  width: 100px;
+  height: 10px;
+  margin-right: 0.5rem;
+  vertical-align: middle;
+  border-radius: 999px;
+  background: var(--paper-deep);
+  overflow: hidden;
+}
+
+.kharcha-bar span {
+  display: block;
+  height: 100%;
+  border-radius: 999px;
+  background: var(--saffron);
+}
+
+.kharcha-percent {
+  font-size: var(--step--1);
+  color: var(--ink-soft);
+  font-variant-numeric: tabular-nums;
+}
+
+.kharcha-empty {
+  padding: 1.5rem;
+  border-radius: var(--radius-medium);
+  background: var(--paper);
+  color: var(--ink-soft);
+  text-align: center;
+}
+
+@media (max-width: 760px) {
+  .kharcha-stats { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 640px) {
+  .kharcha-share-col { min-width: 0; }
+  .kharcha-table td.kharcha-share-col:empty { display: none; }
+}
+
+/* ---------- Kharcha in the admin panel ---------- */
+.kharcha-admin {
+  margin-top: 2.5rem;
+}
+
+.kharcha-admin-head {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.kharcha-admin-head h2 { margin-bottom: 0.2rem; }
+.kharcha-admin-head .field { margin: 0; min-width: 140px; }
+
+.kharcha-stats-4 { grid-template-columns: repeat(4, 1fr); }
+
+.kharcha-admin-grid {
+  display: grid;
+  grid-template-columns: 1.3fr 1fr;
+  gap: 1.5rem;
+  align-items: start;
+  margin-bottom: 1.5rem;
+}
+
+.kharcha-form h3,
+.kharcha-admin .publish-box h3 {
+  font-size: var(--step-1);
+}
+
+.kharcha-unpublished {
+  padding: 0.5rem 0.75rem;
+  border-radius: var(--radius-small);
+  background: #fff3cd;
+  color: #7a5200;
+  font-weight: 600;
+  font-size: var(--step--1);
+}
+
+.kharcha-other-option { margin-bottom: 1rem; }
+.kharcha-other-option label { min-height: 0; font-weight: 500; }
+
+.visibility-toggle {
+  min-height: 36px;
+  padding: 0.25rem 0.85rem;
+  border-radius: 999px;
+  border: 2px solid transparent;
+  font: inherit;
+  font-size: 0.9rem;
+  font-weight: 600;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.visibility-toggle.is-on {
+  background: #eaf5e7;
+  border-color: #b9dbb2;
+  color: var(--success);
+}
+
+.visibility-toggle.is-off {
+  background: var(--paper-deep);
+  border-color: var(--line);
+  color: var(--ink-soft);
+}
+
+.kharcha-table tr.is-hidden-item td:not(:nth-child(5)):not(:last-child) {
+  color: var(--ink-soft);
+  text-decoration: line-through;
+  text-decoration-color: rgba(107, 68, 38, 0.4);
+}
+
+.kharcha-village-view {
+  margin-top: 1rem;
+  padding: 0.75rem 1rem;
+  border-radius: var(--radius-medium);
+  background: var(--paper-deep);
+  color: var(--ink-soft);
+  font-size: var(--step--1);
+}
+
+.kharcha-village-view:empty { display: none; }
+
+@media (max-width: 960px) {
+  .kharcha-admin-grid { grid-template-columns: 1fr; }
+  .kharcha-stats-4 { grid-template-columns: 1fr 1fr; }
+}
+
+@media (max-width: 760px) {
+  .kharcha-stats-4 { grid-template-columns: 1fr; }
+}
+
+/* ---------- Bill photos ---------- */
+.bill-btn {
+  min-height: 34px;
+  padding: 0.2rem 0.8rem;
+  border: 2px solid var(--marigold);
+  border-radius: 999px;
+  background: var(--white);
+  color: var(--ink);
+  font: inherit;
+  font-size: 0.9rem;
+  font-weight: 600;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.bill-btn:hover { background: var(--paper-deep); }
+
+.bill-preview {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-top: 0.4rem;
+}
+
+.bill-preview img {
+  width: 72px;
+  height: 72px;
+  object-fit: cover;
+  border-radius: var(--radius-small);
+  border: 2px solid var(--line);
+}
+
+.bill-dialog {
+  width: min(94vw, 760px);
+  max-height: 92vh;
+  padding: 0;
+  border: 0;
+  border-radius: var(--radius-medium);
+  background: var(--paper);
+  color: var(--ink);
+}
+
+.bill-dialog::backdrop { background: rgba(15, 12, 30, 0.8); }
+
+.bill-dialog-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid var(--line);
+}
+
+.bill-dialog-bar h3 {
+  margin: 0;
+  font-size: var(--step-1);
+}
+
+.bill-dialog img {
+  display: block;
+  width: 100%;
+  max-height: 72vh;
+  object-fit: contain;
+  background: var(--white);
+}
+
+.bill-download {
+  margin: 0.75rem 1rem 1rem;
+}

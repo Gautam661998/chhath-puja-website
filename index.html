@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en-IN">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Chhath Puja | Shreepur Parsa</title>
+  <meta name="description"
+    content="Chhath Puja celebration of our village: rituals, photo gallery, community participation and transparent donation records.">
+
+  <!-- Fonts: Yatra One (festive Devanagari display) + Mukta (Hindi & English body) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Mukta:wght@400;500;600;700&family=Yatra+One&display=swap"
+    rel="stylesheet">
+
+  <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body data-page="home">
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <!-- ===================== HEADER ===================== -->
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="brand" href="index.html" aria-label="Home">
+        <svg class="brand-sun" viewBox="0 0 48 48" aria-hidden="true">
+          <g stroke="#e8731a" stroke-width="3" stroke-linecap="round">
+            <line x1="24" y1="3" x2="24" y2="9" />
+            <line x1="24" y1="39" x2="24" y2="45" />
+            <line x1="3" y1="24" x2="9" y2="24" />
+            <line x1="39" y1="24" x2="45" y2="24" />
+            <line x1="9" y1="9" x2="13" y2="13" />
+            <line x1="35" y1="35" x2="39" y2="39" />
+            <line x1="39" y1="9" x2="35" y2="13" />
+            <line x1="13" y1="35" x2="9" y2="39" />
+          </g>
+          <circle cx="24" cy="24" r="10" fill="#f5a623" stroke="#b3261e" stroke-width="2" />
+        </svg>
+        <span class="brand-text">
+          <span class="brand-village" data-config="villageName">Shreepur Parsa</span>
+          <span class="brand-samiti" data-config="samitiName">Shri Chhath Puja Samiti, Shreepur Parsa</span>
+        </span>
+      </a>
+
+      <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav">
+        <span class="nav-toggle-bars" aria-hidden="true"></span>
+        Menu
+      </button>
+
+      <nav class="site-nav" id="site-nav" aria-label="Main">
+        <ul>
+          <li><a href="index.html" data-nav="home">Home</a></li>
+          <li><a href="index.html#rituals">Rituals</a></li>
+          <li><a href="index.html#gallery">Gallery</a></li>
+          <li><a href="donation.html" data-nav="donations">Donations</a></li>
+        </ul>
+      </nav>
+    </div>
+    <div class="toran" aria-hidden="true"></div>
+  </header>
+
+  <main id="main">
+    <!-- ===================== HERO ===================== -->
+    <!-- To use your own photo: save it as images/hero-ghat.jpg.
+         Until then the illustrated hero-ghat.svg is shown automatically. -->
+    <section class="hero hero--poster" aria-labelledby="hero-title">
+      <img class="hero-image" src="images/hero-ghat.jpg" data-fallback-src="images/hero-ghat1.jpg"
+        alt="Devotees standing in the river at the ghat, offering arghya to the setting sun">
+      <div class="container hero-content">
+        <p class="hero-place">
+          <span data-config="samitiName">Shri Chhath Puja Samiti, Shreepur Parsa</span>
+        </p>
+        <h1 class="hero-title visually-hidden" id="hero-title" lang="hi">जय छठी मईया</h1>
+        <p class="hero-text">
+          प्रत्येक कार्तिक माह में पूरा गाँव <span data-config="ghatName">श्रीपुर परसा घाट</span>
+          पर एकत्रित होकर सूर्य देव और छठी मैया को अर्घ्य अर्पित करता है।
+          आइए, हम सभी मिलकर घाट पर इस पावन पर्व को मनाएँ।
+        </p>
+        <div class="hero-actions">
+          <a class="btn btn-gold" href="donation.html">चंदा का विवरण देखें</a>
+          <a class="btn btn-light-outline" href="#gallery">See the gallery</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== ABOUT ===================== -->
+    <section class="section" id="about" aria-labelledby="about-title">
+      <div class="container intro-grid">
+        <div>
+          <h2 id="about-title">छठ पूजा के बारे में</h2>
+          <p>
+            छठ पूजा बिहार, झारखंड और पूर्वी उत्तर प्रदेश के सबसे प्राचीन त्योहारों में से एक है।
+            यह पर्व जीवनदायिनी सूर्य देव और छठी मैया को समर्पित है।
+            ऐसी मान्यता है कि छठी मैया की पूजा करने से संतान और परिवार को सुख, स्वास्थ्य और लंबी आयु का आशीर्वाद मिलता
+            है।
+          </p>
+          <p>
+            छठ पूजा में न तो किसी मूर्ति की आवश्यकता होती है और न ही किसी पुजारी की।
+            श्रद्धालु, जिन्हें व्रती कहा जाता है, लगभग 36 घंटे तक निर्जला व्रत रखते हैं।
+            वे पानी में खड़े होकर डूबते और उगते हुए सूर्य देव को सूप में ठेकुआ, फल और गन्ना रखकर अर्घ्य अर्पित करते हैं।
+          </p>
+        </div>
+
+        <div class="intro-highlight">
+          <h3>हमारे गाँव का पावन उत्सव</h3>
+          <p>
+            <span data-config="villageName">श्रीपुर परसा</span> में इस पावन पर्व की तैयारियाँ कई सप्ताह पहले ही शुरू हो
+            जाती हैं।
+            गाँव के स्वयंसेवक मिलकर घाट की साफ-सफाई और सजावट करते हैं, रोशनी लगाते हैं और प्रत्येक व्रती के लिए पानी में
+            सुरक्षित स्थान की व्यवस्था करते हैं।
+          </p>
+          <p>
+            समिति द्वारा घाट पर लाइट, टेंट, साउंड सिस्टम, पीने के पानी, प्राथमिक उपचार और सुरक्षा की व्यवस्था की जाती
+            है।
+            आप सभी के द्वारा दिए गए प्रत्येक रुपये के चंदे का पूरा हिसाब रखा जाता है और उसे हमारी वेबसाइट पर सार्वजनिक
+            रूप से दिखाया जाता है।
+          </p>
+          <a class="btn btn-outline" href="donation.html">चंदा कहाँ से आया, देखें</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== FOUR DAYS ===================== -->
+    <section class="section rituals" id="rituals" aria-labelledby="rituals-title">
+      <div class="container">
+        <h2 id="rituals-title">The four days of Chhath</h2>
+        <p class="section-intro">The festival follows the same order every year, from purification to the final arghya
+          at sunrise.</p>
+
+        <ol class="ritual-steps">
+          <li class="ritual-step">
+            <h3 class="ritual-name">नहाय-खाय</h3>
+            <span class="ritual-hindi" lang="hi">नहाय खाय</span>
+            <p>इस दिन व्रती पवित्र स्नान करते हैं और लौकी की सब्जी, चने की दाल तथा चावल का शुद्ध भोजन ग्रहण करते हैं।
+            </p>
+          </li>
+          <li class="ritual-step">
+            <h3 class="ritual-name">खरना</h3>
+            <span class="ritual-hindi" lang="hi">खरना</span>
+            <p>इस दिन व्रती पूरे दिन उपवास रखते हैं और शाम को गुड़ की खीर तथा रोटी का प्रसाद ग्रहण करके व्रत शुरू करते
+              हैं।</p>
+          </li>
+          <li class="ritual-step">
+            <h3 class="ritual-name">संध्या अर्घ्य</h3>
+            <span class="ritual-hindi" lang="hi">संध्या अर्घ्य</span>
+            <p>इस दिन पूरा गाँव घाट पर एकत्रित होता है और डूबते हुए सूर्य देव को अर्घ्य अर्पित करता है।</p>
+          </li>
+          <li class="ritual-step">
+            <h3 class="ritual-name">उषा अर्घ्य</h3>
+            <span class="ritual-hindi" lang="hi">उषा अर्घ्य</span>
+            <p>सुबह उगते हुए सूर्य देव को अर्घ्य अर्पित किया जाता है। इसके बाद व्रती अपना व्रत पूरा करते हैं।</p>
+          </li>
+        </ol>
+      </div>
+    </section>
+    <!-- ===================== GALLERY ===================== -->
+    <!-- Photos are in the images folder. The ORDER of the blocks below decides
+         where each photo appears. "is-wide" = 2 columns wide, "is-tall" = 2 rows tall. -->
+    <section class="section" id="gallery" aria-labelledby="gallery-title">
+      <div class="container">
+        <h2 id="gallery-title">Gallery</h2>
+        <p class="section-intro">हमारे घाट पर पिछले वर्षों में मनाए गए छठ पूजा के कुछ यादगार पल। किसी भी तस्वीर पर क्लिक
+          करके उसे बड़ा करके देखें।</p>
+
+        <div class="gallery-grid">
+
+          <!-- 1. Wide: top left -->
+          <figure class="gallery-item is-wide">
+            <button class="gallery-open" type="button" aria-label="पूजा समिति के सदस्य, बड़ा करके देखें">
+              <img src="images/gallery-1.jpg" alt="पूजा समिति के सदस्य" loading="lazy" data-placeholder
+                style="object-position: center 20%;">
+            </button>
+            <figcaption>पूजा समिति का सदस्य</figcaption>
+          </figure>
+
+          <!-- 2. Tall: top right -->
+          <figure class="gallery-item is-tall">
+            <button class="gallery-open" type="button" aria-label="डॉ मांजरीक मृणाल जी, बड़ा करके देखें">
+              <img src="images/gallery-7.jpg" alt="डॉ मांजरीक मृणाल जी" loading="lazy" data-placeholder>
+            </button>
+            <figcaption>डॉ मांजरीक मृणाल जी</figcaption>
+          </figure>
+
+          <!-- 3. Tall: left side -->
+          <figure class="gallery-item" style="grid-row: span 2;">
+            <button class="gallery-open" type="button" aria-label="वर्तमान पंचायत समिति, बड़ा करके देखें">
+              <img src="images/gallery-3.jpg" alt="वर्तमान पंचायत समिति" loading="lazy" data-placeholder
+                style="object-fit: cover; object-position: center 0%;">
+            </button>
+            <figcaption>वर्तमान पंचायत समिति</figcaption>
+          </figure>
+
+          <!-- 4. Small: middle -->
+          <figure class="gallery-item">
+            <button class="gallery-open" type="button" aria-label="वर्तमान पंचायत सरपंच, बड़ा करके देखें">
+              <img src="images/gallery-4.jpg" alt="वर्तमान पंचायत सरपंच" loading="lazy" data-placeholder>
+            </button>
+            <figcaption>वर्तमान पंचायत सरपंच</figcaption>
+          </figure>
+
+          <!-- 5. Small: middle, below the Sarpanch photo -->
+          <figure class="gallery-item">
+            <button class="gallery-open" type="button" aria-label="वर्तमान वार्ड, बड़ा करके देखें">
+              <img src="images/gallery-2.jpg" alt="वर्तमान वार्ड" loading="lazy" data-placeholder>
+            </button>
+            <figcaption>वर्तमान वार्ड</figcaption>
+          </figure>
+
+          <!-- 6. Tall: right side (tree photo) — placed BEFORE the bottom wide photo so there is no gap -->
+          <figure class="gallery-item is-tall">
+            <button class="gallery-open" type="button" aria-label="पूजा समिति के सदस्य, बड़ा करके देखें">
+              <img src="images/gallery-8.jpg" alt="पूजा समिति के सदस्य पेड़ के नीचे" loading="lazy" data-placeholder
+                style="object-fit: cover; object-position: center 0%;">
+            </button>
+            <figcaption>पूजा समिति के सदस्य</figcaption>
+          </figure>
+
+          <!-- 7. Wide: bottom left -->
+          <figure class="gallery-item is-wide">
+            <button class="gallery-open" type="button" aria-label="पूजा समिति के सदस्य, बड़ा करके देखें">
+              <img src="images/gallery-6.jpg" alt="पूजा समिति के सदस्य" loading="lazy" data-placeholder>
+            </button>
+            <figcaption>पूजा समिति का सदस्य</figcaption>
+          </figure>
+
+          <!-- 9. Small: middle, below the Sarpanch photo -->
+          <figure class="gallery-item">
+            <button class="gallery-open" type="button" aria-label="वर्तमान पंचायत सरपंच, बड़ा करके देखें">
+              <img src="images/gallery-9.jpg" alt="वर्तमान पंचायत सरपंच" loading="lazy" data-placeholder>
+            </button>
+            <figcaption>पूजा समिति का सदस्य</figcaption>
+          </figure>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== COMMUNITY ===================== -->
+    <section class="section community" id="community" aria-labelledby="community-title">
+      <div class="container">
+        <h2 id="community-title">छठ पूजा सबका पर्व है</h2>
+        <p class="section-intro">
+          छठ पूजा कोई भी परिवार अकेले नहीं मनाता। यह पर्व सभी के सहयोग से सफल होता है।
+          हर परिवार अपना कुछ न कुछ योगदान देता है, चाहे वह समय हो, श्रम हो या आर्थिक सहयोग।
+        </p>
+
+        <div class="community-grid">
+          <ul class="ways-list">
+            <li>
+              <h3>घाट की साफ-सफाई करें</h3>
+              <p>छठ पूजा से एक सप्ताह पहले श्रमदान में शामिल होकर घाट और नदी के किनारों की सफाई करें तथा सीढ़ियाँ बनाने
+                में सहयोग दें।</p>
+            </li>
+            <li>
+              <h3>सजावट और रोशनी की व्यवस्था करें</h3>
+              <p>केले के पत्तों से स्वागत द्वार, गेंदे के फूलों की सजावट और घाट तक जाने वाले रास्ते में रोशनी लगाने में
+                सहयोग करें।</p>
+            </li>
+            <li>
+              <h3>सभी की सुरक्षा का ध्यान रखें</h3>
+              <p>भीड़ को नियंत्रित करने, खोया-पाया केंद्र पर सहयोग करने और गहरे पानी वाले स्थानों पर सुरक्षा व्यवस्था
+                बनाए रखने में स्वयंसेवक बनें।</p>
+            </li>
+            <li>
+              <h3>समिति को चंदा दें</h3>
+              <p>आपका हर छोटा-बड़ा चंदा समिति के रिकॉर्ड में दर्ज किया जाता है और पूरे गाँव के लोग उसका विवरण देख सकते
+                हैं।</p>
+            </li>
+          </ul>
+
+          <aside class="donation-callout" id="homeStats" aria-labelledby="callout-title">
+            <h3 id="callout-title">इस वर्ष छठ पूजा के लिए कुल चंदा <span data-stat="year"></span></h3>
+            <p class="callout-figure" data-stat="total">₹0</p>
+            <p class="callout-note">अब तक <span data-stat="count">0</span> लोगों ने चंदा दिया है</p>
+            <a class="btn btn-gold" href="donation.html" data-stat-link>चंदे का पूरा विवरण देखें</a>
+          </aside>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ===================== FOOTER ===================== -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-inner">
+        <div>
+          <p class="footer-title"><span data-config="villageName">Shreepur Parsa</span> Chhath Puja</p>
+          <p><span data-config="samitiName">Shri Chhath Puja Samiti, Shreepur Parsa</span>, <span
+              data-config="district">Samastipur, Bihar</span></p>
+        </div>
+        <ul class="footer-links">
+          <li><a href="index.html">Home</a></li>
+          <li><a href="index.html#gallery">Gallery</a></li>
+          <li><a href="donation.html">Donation records</a></li>
+          <li><a href="admin.html">Admin</a></li>
+        </ul>
+      </div>
+      <p class="footer-bottom">
+        © <span data-current-year>2026</span> <span data-config="samitiName">Shri Chhath Puja Samiti, Shreepur
+          Parsa</span>.
+        All rights reserved.
+        <span lang="hi">जय छठी मईया।</span>
+      </p>
+    </div>
+  </footer>
+
+  <!-- Gallery lightbox -->
+  <dialog class="lightbox" id="lightbox" aria-label="Photo viewer">
+    <img alt="">
+    <div class="lightbox-bar">
+      <p class="lightbox-caption"></p>
+      <button class="btn btn-small btn-gold lightbox-close" type="button">Close</button>
+    </div>
+  </dialog>
+
+  <script src="js/main.js" defer></script>
+</body>
+
+</html>

@@ -1,0 +1,122 @@
+
+/* ==========================================================================
+   HINDI TOOLS (admin.html): English → Hindi names, import, publish
+   ========================================================================== */
+.tools-panel {
+  margin-bottom: 2rem;
+}
+
+.tools-grid {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  gap: 2rem;
+  align-items: start;
+}
+
+.tools-panel h2 {
+  font-size: var(--step-2);
+}
+
+.publish-box {
+  padding: 1.25rem 1.5rem;
+  border-radius: var(--radius-medium);
+  background: var(--paper-deep);
+  border-left: 5px solid var(--sindoor);
+}
+
+.publish-steps {
+  padding-left: 1.25rem;
+  font-size: 0.95rem;
+  color: var(--ink-soft);
+}
+
+.publish-steps li { margin-bottom: 0.3rem; }
+
+.check-field {
+  justify-content: flex-end;
+}
+
+.check-field label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-height: 46px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.check-field input {
+  width: 20px;
+  height: 20px;
+  min-height: 0;
+  accent-color: var(--sindoor);
+}
+
+.field input[type="file"] {
+  padding: 0.5rem;
+  background: var(--paper);
+  cursor: pointer;
+}
+
+/* Import preview */
+.import-preview {
+  margin-top: 2rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--line);
+}
+
+.import-table input.import-name {
+  width: 100%;
+  min-width: 140px;
+  min-height: 38px;
+  padding: 0.3rem 0.6rem;
+  border: 2px solid var(--line);
+  border-radius: var(--radius-small);
+  font: inherit;
+  background: var(--white);
+}
+
+.import-table input.import-name:focus {
+  border-color: var(--saffron);
+  outline: none;
+}
+
+.import-ok .import-status { color: var(--success); font-weight: 600; }
+.import-error .import-status { color: var(--sindoor); font-weight: 600; }
+.import-duplicate .import-status { color: var(--ink-soft); }
+.import-table tr.import-error { background: #fdecea !important; }
+.import-table tr.import-duplicate { opacity: 0.7; }
+
+.import-table td:nth-child(5) { white-space: nowrap; }
+
+.import-actions {
+  margin-top: 1.25rem;
+}
+
+/* Hindi name suggestions under the name box */
+.hindi-suggestions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.hindi-suggestions:empty { display: none; }
+
+.hindi-chip {
+  min-height: 34px;
+  padding: 0.2rem 0.8rem;
+  border: 2px solid var(--marigold);
+  border-radius: 999px;
+  background: var(--white);
+  color: var(--ink);
+  font: inherit;
+  font-size: 0.95rem;
+  cursor: pointer;
+}
+
+.hindi-chip:hover { background: var(--paper-deep); }
+
+@media (max-width: 960px) {
+  .tools-grid { grid-template-columns: 1fr; }
+  .check-field { justify-content: flex-start; }
+}

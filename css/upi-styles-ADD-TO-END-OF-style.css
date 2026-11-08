@@ -1,0 +1,123 @@
+
+/* ==========================================================================
+   DONATE WITH UPI (donation.html)
+   ========================================================================== */
+.donate-section {
+  background: var(--white);
+  border-bottom: 1px solid var(--line);
+}
+
+.donate-grid {
+  display: grid;
+  grid-template-columns: 1.3fr 1fr;
+  gap: clamp(2rem, 5vw, 4rem);
+  align-items: start;
+}
+
+.donate-text p { max-width: 58ch; }
+
+.upi-label {
+  display: block;
+  font-size: var(--step--1);
+  font-weight: 600;
+  color: var(--ink-soft);
+  margin: 0 0 0.35rem;
+}
+
+.upi-id-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.6rem 1rem;
+  padding: 1rem 1.25rem;
+  margin: 1.25rem 0 0.5rem;
+  background: var(--paper-deep);
+  border-radius: var(--radius-medium);
+}
+
+.upi-id-row .upi-label { width: 100%; margin: 0; }
+
+.upi-id {
+  font-family: var(--font-body);
+  font-size: var(--step-1);
+  font-weight: 700;
+  color: var(--sindoor);
+  word-break: break-all;
+}
+
+.upi-payee {
+  font-size: var(--step--1);
+  color: var(--ink-soft);
+}
+
+.mobile-pay { margin: 1.5rem 0; }
+
+.donate-amounts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.amount-chip {
+  min-height: 44px;
+  padding: 0.4rem 1.1rem;
+  border: 2px solid var(--marigold);
+  border-radius: 999px;
+  background: var(--white);
+  color: var(--ink);
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.amount-chip[aria-pressed="true"] {
+  background: var(--marigold);
+  border-color: var(--saffron);
+}
+
+.donate-steps-title {
+  font-size: var(--step-1);
+  margin-top: 1.5rem;
+}
+
+.donate-steps {
+  padding-left: 1.25rem;
+  color: var(--ink-soft);
+}
+
+.donate-steps li { margin-bottom: 0.3rem; }
+
+.upi-qr {
+  margin: 0;
+  padding: 1.25rem;
+  background: var(--paper);
+  border: 3px solid var(--marigold);
+  border-radius: var(--radius-large);
+  text-align: center;
+}
+
+.upi-qr img {
+  width: 100%;
+  max-width: 320px;
+  margin: 0 auto;
+  border-radius: var(--radius-small);
+  background: var(--white);
+}
+
+.upi-qr .photo-placeholder {
+  min-height: 260px;
+  border-radius: var(--radius-small);
+}
+
+.upi-qr figcaption {
+  margin-top: 0.75rem;
+  font-weight: 600;
+  color: var(--sindoor);
+}
+
+@media (max-width: 760px) {
+  .donate-grid { grid-template-columns: 1fr; }
+  /* On phones, show the QR code right after the heading text */
+  .upi-qr { max-width: 360px; margin-inline: auto; width: 100%; }
+}

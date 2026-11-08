@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en-IN">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Admin Panel | Chhath Puja, Shreepur Parsa</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Mukta:wght@400;500;600;700&family=Yatra+One&display=swap"
+    rel="stylesheet">
+
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/extra.css">
+</head>
+
+<body data-page="admin">
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <!-- ===================== HEADER ===================== -->
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="brand" href="index.html" aria-label="Home">
+        <svg class="brand-sun" viewBox="0 0 48 48" aria-hidden="true">
+          <g stroke="#e8731a" stroke-width="3" stroke-linecap="round">
+            <line x1="24" y1="3" x2="24" y2="9" />
+            <line x1="24" y1="39" x2="24" y2="45" />
+            <line x1="3" y1="24" x2="9" y2="24" />
+            <line x1="39" y1="24" x2="45" y2="24" />
+            <line x1="9" y1="9" x2="13" y2="13" />
+            <line x1="35" y1="35" x2="39" y2="39" />
+            <line x1="39" y1="9" x2="35" y2="13" />
+            <line x1="13" y1="35" x2="9" y2="39" />
+          </g>
+          <circle cx="24" cy="24" r="10" fill="#f5a623" stroke="#b3261e" stroke-width="2" />
+        </svg>
+        <span class="brand-text">
+          <span class="brand-village" data-config="villageName">Shreepur Parsa</span>
+          <span class="brand-samiti" data-config="samitiName">Shri Chhath Puja Samiti, Shreepur Parsa</span>
+        </span>
+      </a>
+
+      <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav">
+        <span class="nav-toggle-bars" aria-hidden="true"></span>
+        Menu
+      </button>
+
+      <nav class="site-nav" id="site-nav" aria-label="Main">
+        <ul>
+          <li><a href="index.html" data-nav="home">Home</a></li>
+          <li><a href="index.html#rituals">Rituals</a></li>
+          <li><a href="index.html#gallery">Gallery</a></li>
+          <li><a href="donation.html" data-nav="donations">Donations</a></li>
+          <li><a href="admin.html" data-nav="admin">Admin</a></li>
+        </ul>
+      </nav>
+    </div>
+    <div class="toran" aria-hidden="true"></div>
+  </header>
+
+  <main id="main">
+    <section class="page-banner" aria-labelledby="page-title">
+      <div class="container">
+        <h1 id="page-title">Admin panel</h1>
+        <p>Add, edit and delete donation records. Totals on the public page update automatically.</p>
+      </div>
+    </section>
+
+    <!-- ===================== LOGIN ===================== -->
+    <section class="section" id="loginSection">
+      <div class="container">
+        <form class="login-card" id="loginForm" novalidate>
+          <h2>Admin login</h2>
+          <p class="field-hint">Only authorised Samiti members can log in.</p>
+          <p class="form-message" id="loginError" role="alert" hidden></p>
+          <div class="field">
+            <label for="usernameInput">Your name</label>
+            <input id="usernameInput" type="text" autocomplete="username" autocapitalize="none" spellcheck="false"
+              placeholder="e.g. Gautam" required>
+          </div>
+          <div class="field">
+            <label for="passwordInput">Password</label>
+            <input id="passwordInput" type="password" autocomplete="current-password" required>
+          </div>
+          <button class="btn btn-primary" type="submit">Log in</button>
+        </form>
+      </div>
+    </section>
+
+    <!-- ===================== DASHBOARD ===================== -->
+    <section class="section" id="dashboard" hidden>
+      <div class="container">
+
+        <div class="admin-bar">
+          <p>You are logged in as admin.</p>
+          <div class="form-actions">
+            <a class="btn btn-outline btn-small" href="donation.html">View public page</a>
+            <button class="btn btn-primary btn-small" id="logoutBtn" type="button">Log out</button>
+          </div>
+        </div>
+
+        <div class="admin-layout">
+
+          <!-- Add / edit form -->
+          <div class="panel panel-sticky" id="formPanel">
+            <h2 id="formTitle">Add donation</h2>
+            <form id="donationForm" novalidate>
+              <input type="hidden" id="editingId">
+
+              <div class="field">
+                <label for="donorName">Donor name</label>
+                <input id="donorName" type="text" maxlength="80" autocomplete="off" required
+                  aria-describedby="nameError">
+                <span class="field-error" id="nameError"></span>
+              </div>
+
+              <div class="field">
+                <label for="donationAmount">Amount (₹)</label>
+                <input id="donationAmount" type="text" inputmode="decimal" placeholder="e.g. 1100" required
+                  aria-describedby="amountError">
+                <span class="field-error" id="amountError"></span>
+              </div>
+
+              <div class="field-row">
+                <div class="field">
+                  <label for="donationDate">Date</label>
+                  <input id="donationDate" type="date" required aria-describedby="dateError">
+                  <span class="field-error" id="dateError"></span>
+                </div>
+                <div class="field">
+                  <label for="donationYear">Chhath year</label>
+                  <select id="donationYear" required aria-describedby="yearError"></select>
+                  <span class="field-error" id="yearError"></span>
+                </div>
+              </div>
+
+              <div class="form-actions">
+                <button class="btn btn-primary" id="saveBtn" type="submit">Add donation</button>
+                <button class="btn btn-outline" id="cancelEditBtn" type="button" hidden>Cancel editing</button>
+              </div>
+            </form>
+          </div>
+
+          <!-- Records and summaries -->
+          <div>
+            <div class="admin-section">
+              <div class="toolbar">
+                <div class="field">
+                  <label for="filterYear">Show year</label>
+                  <select id="filterYear"></select>
+                </div>
+                <div class="field">
+                  <label for="searchRecords">Find a donor</label>
+                  <input id="searchRecords" type="search" placeholder="Type a name" autocomplete="off">
+                </div>
+                <span class="toolbar-spacer"></span>
+                <button class="btn btn-outline" id="exportBtn" type="button">Download CSV</button>
+              </div>
+
+              <div class="stats" aria-live="polite">
+                <div class="stat">
+                  <span class="stat-label">Total collection <span id="statScope"></span></span>
+                  <span class="stat-value" id="statTotal">₹0</span>
+                </div>
+                <div class="stat">
+                  <span class="stat-label">Total donors</span>
+                  <span class="stat-value" id="statCount">0</span>
+                </div>
+                <div class="stat">
+                  <span class="stat-label">Highest donation</span>
+                  <span class="stat-value" id="statHighest">₹0</span>
+                </div>
+              </div>
+
+              <div class="table-caption-row">
+                <h2 id="recordsTitle">Donation records</h2>
+                <span class="result-count" id="recordsCount"></span>
+              </div>
+              <div class="table-wrap">
+                <table class="data-table" aria-labelledby="recordsTitle">
+                  <thead>
+                    <tr>
+                      <th scope="col">Donor name</th>
+                      <th scope="col" class="num">Amount</th>
+                      <th scope="col">Date</th>
+                      <th scope="col">Year</th>
+                      <th scope="col"><span class="visually-hidden">Actions</span></th>
+                    </tr>
+                  </thead>
+                  <tbody id="recordsBody"></tbody>
+                </table>
+              </div>
+            </div>
+
+            <div class="admin-section">
+              <div class="table-caption-row">
+                <h2 id="summaryTitle">Year-wise summary</h2>
+              </div>
+              <div class="table-wrap">
+                <table class="data-table" aria-labelledby="summaryTitle">
+                  <thead>
+                    <tr>
+                      <th scope="col">Year</th>
+                      <th scope="col" class="num">Donors</th>
+                      <th scope="col" class="num">Total collection</th>
+                      <th scope="col" class="num">Highest</th>
+                    </tr>
+                  </thead>
+                  <tbody id="summaryBody"></tbody>
+                  <tfoot id="summaryFoot"></tfoot>
+                </table>
+              </div>
+            </div>
+
+            <div class="danger-zone">
+              <h3>Testing tools</h3>
+              <p>Use these while setting up the site. Download a CSV backup first, because these cannot be undone.</p>
+              <div class="form-actions">
+                <button class="btn btn-danger btn-small" id="resetSampleBtn" type="button">Replace all with sample
+                  data</button>
+                <button class="btn btn-danger btn-small" id="clearAllBtn" type="button">Delete all records</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <p class="storage-note">
+          Records are saved only in this browser on this device (LocalStorage). They are not shared with
+          other phones or computers, and clearing browser data will erase them. Download a CSV backup regularly.
+        </p>
+      </div>
+    </section>
+  </main>
+
+  <!-- ===================== FOOTER ===================== -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-inner">
+        <div>
+          <p class="footer-title"><span data-config="villageName">Shreepur Parsa</span> Chhath Puja</p>
+          <p><span data-config="samitiName">Shri Chhath Puja Samiti, Shreepur Parsa</span>, <span
+              data-config="district">Bhojpur, Bihar</span></p>
+        </div>
+        <ul class="footer-links">
+          <li><a href="index.html">Home</a></li>
+          <li><a href="index.html#gallery">Gallery</a></li>
+          <li><a href="donation.html">Donation records</a></li>
+          <li><a href="admin.html">Admin</a></li>
+        </ul>
+      </div>
+      <p class="footer-bottom">
+        © <span data-current-year>2026</span> <span data-config="samitiName">Shri Chhath Puja Samiti, Shreepur
+          Parsa</span>. All rights reserved.
+        <span lang="hi">जय छठी मईया।</span>
+      </p>
+    </div>
+  </footer>
+
+  <script src="js/main.js" defer></script>
+  <script src="js/admin.js" defer></script>
+  <script src="js/hindi.js" defer></script>
+  <script src="js/kharcha.js" defer></script>
+</body>
+
+</html>
