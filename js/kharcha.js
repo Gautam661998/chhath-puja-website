@@ -23,7 +23,7 @@
 /* EXPENSES-START — this block is rewritten by the admin panel */
 const EXPENSES = {
   2023: [
-    { item: "डी.जे. (DJ)", amount: 5100, note: "₹4,600 जमा + ₹500 बाकी", show: false },
+    { item: "डी.जे. (DJ)", amount: 5100, note: "₹4,600 जमा + ₹500 बाकी", show: true },
     { item: "कपड़ा", amount: 1800, note: "₹1,300 + ₹500", show: true },
     { item: "झंडी (2 किलो)", amount: 360, note: "", show: true },
     { item: "ठेला", amount: 200, note: "₹100 + ₹100", show: true },
@@ -41,7 +41,7 @@ const EXPENSES = {
 //                        so the village still sees the correct total and balance.
 // hiddenAsOther: false → hidden items are left out completely (no balance is shown).
 const EXPENSE_SETTINGS = {
-  2023: { hiddenAsOther: false },
+  2023: { hiddenAsOther: true },
 };
 /* EXPENSES-END */
 
