@@ -18,10 +18,10 @@
    Any element with data-config="villageName" (etc.) is filled in on load.
    -------------------------------------------------------------------------- */
 const SITE_CONFIG = {
-  villageName: 'Shreepur Parsa',
-  samitiName: 'Shri Chhath Puja Samiti, Shreepur Parsa',
-  ghatName: 'Shreepur Parsa Ghat',
-  district: 'Samastipur, Bihar'
+  villageName: 'श्रीपुर परसा',
+  samitiName: 'श्री छठ पूजा समिति, श्रीपुर परसा',
+  ghatName: 'श्रीपुर परसा घाट',
+  district: 'समस्तीपुर, बिहार'
 };
 
 /* --------------------------------------------------------------------------

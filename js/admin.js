@@ -30,7 +30,7 @@ const ADMIN_USERS = {
   gautam: { name: 'Gautam Goswami', password: 'gautam@chhath' },
   digambar: { name: 'Digambar Yadav', password: 'digambar@chhath' },
   shivpujan: { name: 'Shivpujan Yadav', password: 'shivpujan@chhath' },
-  kanhaiya: { name: 'Kanhaiya Kumar', password: 'kanhaiya@chhath' }
+  kanhaiya: { name: 'Kanhaiya Kumar', password: 'kanhaiya@chhath' },
 };
 
 /* Login lasts until the browser tab is closed. Stores the login name. */

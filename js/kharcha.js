@@ -41,7 +41,7 @@ const EXPENSES = {
 //                        so the village still sees the correct total and balance.
 // hiddenAsOther: false → hidden items are left out completely (no balance is shown).
 const EXPENSE_SETTINGS = {
-  2023: { hiddenAsOther: false },
+  2023: { hiddenAsOther: true },
 };
 /* EXPENSES-END */
 
