@@ -38,8 +38,11 @@ const SITE_CONFIG = {
 const COLLECTION_DATE = '2025-10-27'; // change if collected on another day (YYYY-MM-DD)
 
 const SAMPLE_DONATIONS = [
-  // ---------- Chhath Puja 2026 — 1 donations, total ₹234 ----------
+  // ---------- Chhath Puja 2026 — 4 donations, total ₹1,217 ----------
   ["ओम प्रकाश", 234, "2026-11-09"],
+  ["मुकेश कुमार", 407, "2026-11-09"],
+  ["मोहन मिश्रा", 255, "2026-11-09"],
+  ["राम", 321, "2026-11-09"],
 
   // ---------- Chhath Puja 2025 — 74 donations, total ₹13,677 ----------
   ["दिनेश मंडल", 200, "2025-10-27"],
