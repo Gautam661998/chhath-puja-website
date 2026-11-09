@@ -18,8 +18,8 @@
 /* --------------------------------------------------------------------------
    SETTINGS — your GitHub repository
    -------------------------------------------------------------------------- */
-const GITHUB_OWNER = 'Gautam661998';
-const GITHUB_REPO = 'chhath-puja-website';
+const GITHUB_OWNER = 'shreepurparsa';
+const GITHUB_REPO = 'shreepurparsa.github.io';
 const GITHUB_BRANCH = 'main';
 
 const GH_TOKEN_KEY = 'chhathPuja.githubToken';
