@@ -18,8 +18,8 @@
 /* --------------------------------------------------------------------------
    SETTINGS — your GitHub repository
    -------------------------------------------------------------------------- */
-const GITHUB_OWNER = 'Gautam661998';
-const GITHUB_REPO = 'chhath-puja-website';
+const GITHUB_OWNER = 'shreepurparsa';
+const GITHUB_REPO = 'shreepurparsa.github.io';
 const GITHUB_BRANCH = 'main';
 
 const GH_TOKEN_KEY = 'chhathPuja.githubToken';
@@ -236,6 +236,17 @@ function injectGithubStyles() {
     '.gallery-admin-item figcaption{padding:.5rem .6rem;font-size:var(--step--1);}',
     '.gallery-admin-item .btn{margin:0 .6rem .6rem;}',
     '.gallery-admin-empty{color:var(--ink-soft);}',
+    '.gal-editor{margin-top:1.25rem;padding:1.25rem;border:2px dashed var(--marigold);border-radius:var(--radius-medium);background:var(--paper);}',
+    '.gal-editor-title{font-weight:600;color:var(--sindoor);margin:0 0 .75rem;}',
+    '.gal-previews{display:flex;flex-wrap:wrap;gap:1.25rem;align-items:flex-end;margin-bottom:1rem;}',
+    '.gal-previews figure{margin:0;}',
+    '.gal-previews figcaption{font-size:var(--step--1);color:var(--ink-soft);margin-top:.35rem;text-align:center;}',
+    '.gal-frame{position:relative;overflow:hidden;border-radius:12px;background:var(--paper-deep);cursor:grab;touch-action:none;box-shadow:0 0 0 2px var(--line);}',
+    '.gal-frame img{width:100%;height:100%;display:block;pointer-events:none;user-select:none;}',
+    '.gal-controls{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:.75rem 1.25rem;margin-bottom:.5rem;}',
+    '.gal-controls label{display:flex;flex-direction:column;gap:.3rem;font-weight:600;font-size:.95rem;}',
+    '.gal-controls input{width:100%;accent-color:var(--sindoor);}',
+    '@media (max-width:640px){.gal-controls{grid-template-columns:1fr;}}',
     '@media (max-width:960px){.gallery-admin-form{grid-template-columns:1fr 1fr;}}',
     '@media (max-width:640px){.gallery-admin-form{grid-template-columns:1fr;}}'
   ].join('\n');
@@ -424,6 +435,21 @@ function buildGalleryAdminPanel() {
   else dashboard.querySelector('.container').appendChild(panel);
 }
 
+/* Tile shapes of the home-page gallery, so the preview matches the real page:
+   [width, height] on a computer and on a phone, for each size choice. */
+const GALLERY_SHAPES = {
+  '':     { desk: [365, 220], phone: [180, 170] },
+  'wide': { desk: [745, 220], phone: [372, 170] },
+  'tall': { desk: [365, 452], phone: [180, 352] }
+};
+
+/** The same picture settings the home page uses (see gallery.js). */
+function galleryImageStyle(fx, fy, zoom) {
+  return 'object-fit:cover;object-position:' + fx + '% ' + fy + '%;transform:scale(' + zoom + ');transform-origin:' + fx + '% ' + fy + '%';
+}
+
+let galleryEdit = null;     // { mode: 'new' | 'edit', id, src, fx, fy, zoom }
+
 async function renderGalleryAdmin() {
   const panel = document.getElementById('galleryAdmin');
   if (!panel) return;
@@ -435,7 +461,7 @@ async function renderGalleryAdmin() {
 
   panel.innerHTML =
     '<h2>गैलरी फ़ोटो</h2>' +
-    '<p class="field-hint">यहाँ से जोड़ी गई फ़ोटो होम पेज की गैलरी में सबसे आख़िर में दिखेंगी (1–3 मिनट बाद)।</p>' +
+    '<p class="field-hint">यहाँ से जोड़ी गई फ़ोटो होम पेज की गैलरी में सबसे आख़िर में दिखेंगी (3–10 मिनट बाद)।</p>' +
     '<form class="gallery-admin-form" id="galleryForm" novalidate>' +
       '<div class="field"><label for="galleryFile">फ़ोटो चुनें</label><input id="galleryFile" type="file" accept="image/*"></div>' +
       '<div class="field"><label for="galleryCaption">फ़ोटो का नाम / विवरण</label><input id="galleryCaption" type="text" maxlength="80" placeholder="जैसे: संध्या अर्घ्य 2026"></div>' +
@@ -444,15 +470,142 @@ async function renderGalleryAdmin() {
       '</select></div>' +
       '<button class="btn btn-primary" id="galleryAddBtn" type="submit">फ़ोटो जोड़ें</button>' +
     '</form>' +
+    '<div class="gal-editor" id="galEditor" hidden>' +
+      '<p class="gal-editor-title" id="galEditorTitle">फ़ोटो ठीक से सेट करें</p>' +
+      '<div class="gal-previews">' +
+        '<figure><div class="gal-frame" id="galFrameDesk"><img alt="कंप्यूटर पर झलक" draggable="false"></div><figcaption>कंप्यूटर पर ऐसी दिखेगी</figcaption></figure>' +
+        '<figure><div class="gal-frame" id="galFramePhone"><img alt="फ़ोन पर झलक" draggable="false"></div><figcaption>फ़ोन पर ऐसी दिखेगी</figcaption></figure>' +
+      '</div>' +
+      '<div class="gal-controls">' +
+        '<label>ज़ूम 🔍 <input id="galZoom" type="range" min="1" max="2.5" step="0.05" value="1"></label>' +
+        '<label>बाएँ ↔ दाएँ <input id="galX" type="range" min="0" max="100" step="1" value="50"></label>' +
+        '<label>ऊपर ↕ नीचे <input id="galY" type="range" min="0" max="100" step="1" value="50"></label>' +
+      '</div>' +
+      '<p class="field-hint">झलक पर उँगली या माउस से <strong>खींचकर</strong> भी फ़ोटो सरका सकते हैं। चेहरे बीच में आ जाएँ, तो बढ़िया।</p>' +
+      '<div class="form-actions"><button class="btn btn-outline btn-small" id="galReset" type="button">पहले जैसा</button>' +
+      '<button class="btn btn-outline btn-small" id="galCancel" type="button">रद्द करें</button></div>' +
+    '</div>' +
     '<p class="gh-status" id="galleryStatus"></p>' +
     '<div class="gallery-admin-list" id="galleryList"><p class="gallery-admin-empty">फ़ोटो लोड हो रही हैं…</p></div>';
 
-  document.getElementById('galleryForm').addEventListener('submit', addGalleryPhoto);
+  document.getElementById('galleryForm').addEventListener('submit', saveGalleryPhoto);
+  document.getElementById('galleryFile').addEventListener('change', chooseGalleryFile);
+  document.getElementById('gallerySize').addEventListener('change', drawGalleryPreview);
+  ['galZoom', 'galX', 'galY'].forEach(function (id) {
+    document.getElementById(id).addEventListener('input', function () {
+      if (!galleryEdit) return;
+      galleryEdit.zoom = Number(document.getElementById('galZoom').value);
+      galleryEdit.fx = Number(document.getElementById('galX').value);
+      galleryEdit.fy = Number(document.getElementById('galY').value);
+      drawGalleryPreview();
+    });
+  });
+  document.getElementById('galReset').addEventListener('click', function () {
+    if (!galleryEdit) return;
+    Object.assign(galleryEdit, { fx: 50, fy: 50, zoom: 1 });
+    syncGallerySliders();
+    drawGalleryPreview();
+  });
+  document.getElementById('galCancel').addEventListener('click', closeGalleryEditor);
+  ['galFrameDesk', 'galFramePhone'].forEach(enableGalleryDrag);
   document.getElementById('galleryList').addEventListener('click', function (event) {
-    const button = event.target.closest('button[data-remove]');
-    if (button) removeGalleryPhoto(button.getAttribute('data-remove'));
+    const remove = event.target.closest('button[data-remove]');
+    if (remove) removeGalleryPhoto(remove.getAttribute('data-remove'));
+    const edit = event.target.closest('button[data-edit]');
+    if (edit) openGalleryEdit(edit.getAttribute('data-edit'));
   });
   await refreshGalleryList();
+}
+
+function syncGallerySliders() {
+  document.getElementById('galZoom').value = galleryEdit.zoom;
+  document.getElementById('galX').value = galleryEdit.fx;
+  document.getElementById('galY').value = galleryEdit.fy;
+}
+
+/** Draws both previews in the real tile shapes with the current settings. */
+function drawGalleryPreview() {
+  if (!galleryEdit) return;
+  const shape = GALLERY_SHAPES[document.getElementById('gallerySize').value] || GALLERY_SHAPES[''];
+  [['galFrameDesk', shape.desk, 300], ['galFramePhone', shape.phone, 150]].forEach(function (f) {
+    const frame = document.getElementById(f[0]);
+    const w = f[2], h = Math.round(f[2] * f[1][1] / f[1][0]);
+    frame.style.width = w + 'px';
+    frame.style.height = Math.min(h, 320) + 'px';
+    if (h > 320) frame.style.width = Math.round(320 * f[1][0] / f[1][1]) + 'px';
+    const img = frame.querySelector('img');
+    if (img.getAttribute('src') !== galleryEdit.src) img.src = galleryEdit.src;
+    img.setAttribute('style', galleryImageStyle(galleryEdit.fx, galleryEdit.fy, galleryEdit.zoom));
+  });
+}
+
+/** Drag on a preview to move the picture inside its frame. */
+function enableGalleryDrag(frameId) {
+  const frame = document.getElementById(frameId);
+  let start = null;
+  frame.addEventListener('pointerdown', function (event) {
+    if (!galleryEdit) return;
+    start = { x: event.clientX, y: event.clientY, fx: galleryEdit.fx, fy: galleryEdit.fy };
+    frame.setPointerCapture(event.pointerId);
+  });
+  frame.addEventListener('pointermove', function (event) {
+    if (!start || !galleryEdit) return;
+    const dx = (event.clientX - start.x) / frame.clientWidth * 100 / galleryEdit.zoom;
+    const dy = (event.clientY - start.y) / frame.clientHeight * 100 / galleryEdit.zoom;
+    galleryEdit.fx = Math.max(0, Math.min(100, Math.round(start.fx - dx)));
+    galleryEdit.fy = Math.max(0, Math.min(100, Math.round(start.fy - dy)));
+    syncGallerySliders();
+    drawGalleryPreview();
+  });
+  ['pointerup', 'pointercancel'].forEach(function (type) {
+    frame.addEventListener(type, function () { start = null; });
+  });
+}
+
+async function chooseGalleryFile(event) {
+  const file = event.target.files[0];
+  if (!file) { closeGalleryEditor(); return; }
+  setGalleryStatus('फ़ोटो तैयार हो रही है…');
+  try {
+    const dataURL = await compressBillImage(file);        // from kharcha.js
+    galleryEdit = { mode: 'new', src: dataURL, fx: 50, fy: 50, zoom: 1 };
+    openGalleryEditor('नई फ़ोटो: ठीक से सेट करें, फिर "फ़ोटो जोड़ें" दबाएँ', 'फ़ोटो जोड़ें');
+    setGalleryStatus('');
+  } catch (error) {
+    event.target.value = '';
+    setGalleryStatus(error.message, 'error');
+  }
+}
+
+async function openGalleryEdit(id) {
+  const list = await readGalleryList();
+  const photo = list.find(function (p) { return p.id === id; });
+  if (!photo) return;
+  galleryEdit = {
+    mode: 'edit', id: id, src: galleryImageURL(photo.src),
+    fx: photo.fx === undefined ? 50 : photo.fx, fy: photo.fy === undefined ? 50 : photo.fy, zoom: photo.zoom || 1
+  };
+  document.getElementById('galleryCaption').value = photo.caption || '';
+  document.getElementById('gallerySize').value = photo.size || '';
+  document.getElementById('galleryFile').value = '';
+  openGalleryEditor('फ़ोटो बदलें: "' + (photo.caption || 'फ़ोटो') + '"', 'बदलाव सेव करें');
+  document.getElementById('galEditor').scrollIntoView({ behavior: 'smooth', block: 'center' });
+}
+
+function openGalleryEditor(title, buttonText) {
+  document.getElementById('galEditorTitle').textContent = title;
+  document.getElementById('galleryAddBtn').textContent = buttonText;
+  document.getElementById('galEditor').hidden = false;
+  syncGallerySliders();
+  drawGalleryPreview();
+}
+
+function closeGalleryEditor() {
+  galleryEdit = null;
+  const form = document.getElementById('galleryForm');
+  if (form) form.reset();
+  document.getElementById('galEditor').hidden = true;
+  document.getElementById('galleryAddBtn').textContent = 'फ़ोटो जोड़ें';
 }
 
 async function refreshGalleryList() {
@@ -461,10 +614,12 @@ async function refreshGalleryList() {
   try {
     const list = await readGalleryList();
     listBox.innerHTML = list.length ? list.map(function (photo) {
+      const fx = photo.fx === undefined ? 50 : photo.fx, fy = photo.fy === undefined ? 50 : photo.fy;
       return '<figure class="gallery-admin-item">' +
-        '<img src="' + escapeHTML(galleryImageURL(photo.src)) + '" alt="' + escapeHTML(photo.caption || 'फ़ोटो') + '" loading="lazy">' +
+        '<div style="height:120px;overflow:hidden;background:var(--paper-deep)"><img src="' + escapeHTML(galleryImageURL(photo.src)) + '" alt="' + escapeHTML(photo.caption || 'फ़ोटो') + '" loading="lazy" style="width:100%;height:100%;' + galleryImageStyle(fx, fy, photo.zoom || 1) + '"></div>' +
         '<figcaption>' + escapeHTML(photo.caption || '–') + '</figcaption>' +
-        '<button class="btn btn-danger btn-small" type="button" data-remove="' + escapeHTML(photo.id) + '">हटाएँ</button>' +
+        '<div style="display:flex;gap:.4rem;padding:0 .6rem .6rem"><button class="btn btn-outline btn-small" type="button" data-edit="' + escapeHTML(photo.id) + '">बदलें</button>' +
+        '<button class="btn btn-danger btn-small" type="button" data-remove="' + escapeHTML(photo.id) + '">हटाएँ</button></div>' +
       '</figure>';
     }).join('') : '<p class="gallery-admin-empty">अभी यहाँ से कोई फ़ोटो नहीं जोड़ी गई है। (पुरानी गैलरी फ़ोटो वैसी ही रहेंगी।)</p>';
   } catch (error) {
@@ -479,41 +634,43 @@ function setGalleryStatus(text, kind) {
   status.className = 'gh-status' + (kind ? ' is-' + kind : '');
 }
 
-async function addGalleryPhoto(event) {
+async function saveGalleryPhoto(event) {
   event.preventDefault();
   if (ghBusy) return;
-  const fileInput = document.getElementById('galleryFile');
+  if (!galleryEdit) { setGalleryStatus('पहले फ़ोटो चुनें।', 'error'); return; }
   const caption = document.getElementById('galleryCaption').value.trim();
   const size = document.getElementById('gallerySize').value;
-  const file = fileInput.files[0];
-  if (!file) { setGalleryStatus('पहले फ़ोटो चुनें।', 'error'); return; }
+  const look = { fx: galleryEdit.fx, fy: galleryEdit.fy, zoom: galleryEdit.zoom };
 
   const button = document.getElementById('galleryAddBtn');
   ghBusy = true;
   button.disabled = true;
   try {
-    setGalleryStatus('फ़ोटो छोटी की जा रही है…');
-    const dataURL = await compressBillImage(file);       // from kharcha.js
-    const base64 = dataURL.split(',')[1];
-    const id = 'photo-' + Date.now().toString(36);
-    const path = GALLERY_IMAGE_FOLDER + id + '.jpg';
-
     setGalleryStatus('GitHub पर सेव हो रही है…');
     const list = await readGalleryList();
-    list.push({ id: id, src: path, caption: caption, size: size, added: todayISO() });
-
-    await ghCommitFiles([
-      { path: path, content: base64, encoding: 'base64' },
-      { path: GALLERY_JSON_PATH, content: JSON.stringify(list, null, 2) + '\n' }
-    ], 'Admin panel: गैलरी फ़ोटो जोड़ी' + (caption ? ' — ' + caption : ''));
-
-    document.getElementById('galleryForm').reset();
-    setGalleryStatus('✓ फ़ोटो जुड़ गई। 1–3 मिनट में होम पेज की गैलरी में दिखेगी।', 'ok');
-    showToast('फ़ोटो जुड़ गई ✓', 'success');
+    if (galleryEdit.mode === 'edit') {
+      const photo = list.find(function (p) { return p.id === galleryEdit.id; });
+      if (!photo) throw new Error('यह फ़ोटो अब गैलरी में नहीं है।');
+      Object.assign(photo, { caption: caption, size: size }, look);
+      await ghCommitFiles([{ path: GALLERY_JSON_PATH, content: JSON.stringify(list, null, 2) + '\n' }],
+        'Admin panel: गैलरी फ़ोटो बदली' + (caption ? ' — ' + caption : ''));
+      setGalleryStatus('✓ बदलाव सेव हो गया। 3–10 मिनट में होम पेज पर दिखेगा।', 'ok');
+    } else {
+      const id = 'photo-' + Date.now().toString(36);
+      const path = GALLERY_IMAGE_FOLDER + id + '.jpg';
+      list.push(Object.assign({ id: id, src: path, caption: caption, size: size, added: todayISO() }, look));
+      await ghCommitFiles([
+        { path: path, content: galleryEdit.src.split(',')[1], encoding: 'base64' },
+        { path: GALLERY_JSON_PATH, content: JSON.stringify(list, null, 2) + '\n' }
+      ], 'Admin panel: गैलरी फ़ोटो जोड़ी' + (caption ? ' — ' + caption : ''));
+      setGalleryStatus('✓ फ़ोटो जुड़ गई। 3–10 मिनट में होम पेज की गैलरी में दिखेगी।', 'ok');
+    }
+    showToast('सेव हो गया ✓', 'success');
+    closeGalleryEditor();
     await refreshGalleryList();
   } catch (error) {
     console.error(error);
-    setGalleryStatus(error.message || 'फ़ोटो नहीं जुड़ पाई।', 'error');
+    setGalleryStatus(error.message || 'सेव नहीं हो पाया।', 'error');
   } finally {
     ghBusy = false;
     button.disabled = false;
@@ -532,7 +689,8 @@ async function removeGalleryPhoto(id) {
     const files = [{ path: GALLERY_JSON_PATH, content: JSON.stringify(remaining, null, 2) + '\n' }];
     if (photo && photo.src && photo.src.indexOf(GALLERY_IMAGE_FOLDER) === 0) files.push({ path: photo.src, remove: true });
     await ghCommitFiles(files, 'Admin panel: गैलरी फ़ोटो हटाई');
-    setGalleryStatus('✓ फ़ोटो हटा दी गई। 1–3 मिनट में वेबसाइट से हट जाएगी।', 'ok');
+    setGalleryStatus('✓ फ़ोटो हटा दी गई। 3–10 मिनट में वेबसाइट से हट जाएगी।', 'ok');
+    if (galleryEdit && galleryEdit.id === id) closeGalleryEditor();
     await refreshGalleryList();
   } catch (error) {
     console.error(error);

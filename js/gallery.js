@@ -6,6 +6,15 @@
 
 'use strict';
 
+/** Zoom and position chosen in the admin panel (older photos have none). */
+function photoLook(photo) {
+  if (photo.fx === undefined && photo.fy === undefined && !photo.zoom) return '';
+  const fx = photo.fx === undefined ? 50 : Number(photo.fx);
+  const fy = photo.fy === undefined ? 50 : Number(photo.fy);
+  const zoom = Number(photo.zoom) || 1;
+  return ' style="object-position:' + fx + '% ' + fy + '%;transform:scale(' + zoom + ');transform-origin:' + fx + '% ' + fy + '%"';
+}
+
 document.addEventListener('DOMContentLoaded', async function () {
   const grid = document.querySelector('.gallery-grid');
   if (!grid) return;
@@ -27,7 +36,7 @@ document.addEventListener('DOMContentLoaded', async function () {
     figure.className = 'gallery-item' + (photo.size === 'wide' ? ' is-wide' : photo.size === 'tall' ? ' is-tall' : '');
     figure.innerHTML =
       '<button class="gallery-open" type="button" aria-label="' + escapeHTML(caption || 'फ़ोटो') + ', बड़ा करके देखें">' +
-        '<img src="' + escapeHTML(photo.src) + '" alt="' + escapeHTML(caption || 'छठ पूजा की फ़ोटो') + '" loading="lazy">' +
+        '<img src="' + escapeHTML(photo.src) + '" alt="' + escapeHTML(caption || 'छठ पूजा की फ़ोटो') + '" loading="lazy"' + photoLook(photo) + '>' +
       '</button>' +
       (caption ? '<figcaption>' + escapeHTML(caption) + '</figcaption>' : '');
     grid.appendChild(figure);
