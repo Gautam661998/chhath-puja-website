@@ -28,5 +28,17 @@
     "fx": 50,
     "fy": 11,
     "zoom": 1
+  },
+  {
+    "id": "video-mwa3qj22",
+    "kind": "video",
+    "src": "images/gallery/video-mwa3qj22.jpg",
+    "video": "videos/video-mwa3qj22.mp4",
+    "caption": "",
+    "size": "",
+    "added": "2026-11-10",
+    "fx": 50,
+    "fy": 50,
+    "zoom": 1
   }
 ]
