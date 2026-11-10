@@ -20,7 +20,7 @@ const UPI_CONFIG = {
   note: 'Chhath Puja Donation',
 
   // Quick amount buttons (₹). Leave [] for none.
-  suggestedAmounts: [101, 201, 501, 1100],
+  suggestedAmounts: [151, 201, 251, 501, 1100],
 
   // WhatsApp number for payment screenshots: 91 + 10-digit number, no + or spaces.
   // Leave '' to hide the WhatsApp button.
