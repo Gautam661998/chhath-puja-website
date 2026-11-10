@@ -1,8 +1,10 @@
 /* ==========================================================================
-   share.js — "WhatsApp पर शेयर करें" and "Instagram स्टोरी" buttons
+   share.js — WhatsApp, Facebook and Instagram story buttons
    Load on index.html and donation.html after main.js.
 
    WhatsApp: opens WhatsApp with a ready message and the website link.
+   Facebook: opens Facebook's share box with the website link; Facebook
+   shows the preview card (images/og-image.jpg) by itself.
    Instagram: makes a tall story picture (1080x1920) from the home-page
    poster, copies the website link, and opens the phone's share menu,
    where Instagram → Story can be chosen. The picture always uses the
@@ -27,6 +29,13 @@ function shareButtonHTML(extraStyle) {
     'WhatsApp पर शेयर करें</a>';
 }
 
+function facebookButtonHTML() {
+  return '<a class="btn fb-btn" lang="hi" href="https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(SHARE_URL) + '" target="_blank" rel="noopener"' +
+    ' style="background:#1877F2;color:#FFFFFF;gap:.5rem">' +
+    '<svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M14 8h3V4h-3c-2.8 0-4.5 1.8-4.5 4.6V11H7v4h2.5v9h4v-9h3l.5-4h-3.5V8.8c0-.5.3-.8.5-.8z"/></svg>' +
+    'Facebook पर शेयर करें</a>';
+}
+
 function storyButtonHTML() {
   return '<button type="button" class="btn story-btn" lang="hi" style="background:linear-gradient(45deg,#F58529,#DD2A7B,#8134AF);color:#FFFFFF;gap:.5rem;border:0">' +
     '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' +
@@ -38,13 +47,13 @@ document.addEventListener('DOMContentLoaded', function () {
   // Home page: next to the buttons in the top section
   const heroActions = document.querySelector('.hero-actions');
   if (heroActions && !heroActions.querySelector('.share-btn')) {
-    heroActions.insertAdjacentHTML('beforeend', shareButtonHTML() + storyButtonHTML());
+    heroActions.insertAdjacentHTML('beforeend', shareButtonHTML() + facebookButtonHTML() + storyButtonHTML());
   }
 
   // Donations page: under the page heading
   const banner = document.querySelector('.page-banner .container');
   if (banner && !banner.querySelector('.share-btn')) {
-    banner.insertAdjacentHTML('beforeend', '<div style="margin-top:1.25rem;display:flex;flex-wrap:wrap;gap:.75rem">' + shareButtonHTML() + storyButtonHTML() + '</div>');
+    banner.insertAdjacentHTML('beforeend', '<div style="margin-top:1.25rem;display:flex;flex-wrap:wrap;gap:.75rem">' + shareButtonHTML() + facebookButtonHTML() + storyButtonHTML() + '</div>');
   }
 
   document.querySelectorAll('.story-btn').forEach(function (button) {
