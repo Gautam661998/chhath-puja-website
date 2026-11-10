@@ -34,12 +34,59 @@ document.addEventListener('DOMContentLoaded', async function () {
     const caption = String(photo.caption || '');
     const figure = document.createElement('figure');
     figure.className = 'gallery-item' + (photo.size === 'wide' ? ' is-wide' : photo.size === 'tall' ? ' is-tall' : '');
+    if (photo.kind === 'video' && photo.video) {
+      figure.innerHTML =
+        '<button class="gallery-video" type="button" data-video="' + escapeHTML(photo.video) + '" data-caption="' + escapeHTML(caption) + '" aria-label="' + escapeHTML(caption || 'वीडियो') + ', वीडियो चलाएँ">' +
+          '<img src="' + escapeHTML(photo.src) + '" alt="' + escapeHTML(caption || 'छठ पूजा का वीडियो') + '" loading="lazy"' + photoLook(photo) + '>' +
+          '<span class="video-play" aria-hidden="true">▶</span>' +
+        '</button>' +
+        (caption ? '<figcaption>' + escapeHTML(caption) + '</figcaption>' : '');
+      grid.appendChild(figure);
+      return;
+    }
     figure.innerHTML =
       '<button class="gallery-open" type="button" aria-label="' + escapeHTML(caption || 'फ़ोटो') + ', बड़ा करके देखें">' +
         '<img src="' + escapeHTML(photo.src) + '" alt="' + escapeHTML(caption || 'छठ पूजा की फ़ोटो') + '" loading="lazy"' + photoLook(photo) + '>' +
       '</button>' +
       (caption ? '<figcaption>' + escapeHTML(caption) + '</figcaption>' : '');
     grid.appendChild(figure);
+  });
+});
+
+/* --------------------------------------------------------------------------
+   Gallery videos: the video loads only when someone taps ▶ (saves mobile data).
+   -------------------------------------------------------------------------- */
+document.addEventListener('DOMContentLoaded', function () {
+  const style = document.createElement('style');
+  style.textContent =
+    '.gallery-video{display:block;position:relative;width:100%;height:100%;padding:0;border:0;background:none;cursor:pointer;}' +
+    '.gallery-video img{width:100%;height:100%;object-fit:cover;}' +
+    '.video-play{position:absolute;left:50%;top:50%;width:64px;height:64px;margin:-32px 0 0 -32px;border-radius:50%;' +
+    'display:grid;place-items:center;padding-left:5px;background:rgba(0,0,0,.6);color:#fff;font-size:26px;box-shadow:0 0 0 3px rgba(255,255,255,.75);}' +
+    '.video-box video{display:block;width:100%;max-height:78vh;background:#000;}';
+  document.head.appendChild(style);
+
+  let box = null;
+  document.addEventListener('click', function (event) {
+    const opener = event.target.closest('.gallery-video');
+    if (!opener) return;
+    if (!box) {
+      box = document.createElement('dialog');
+      box.className = 'lightbox video-box';
+      box.setAttribute('aria-label', 'वीडियो');
+      box.innerHTML = '<video controls playsinline></video><div class="lightbox-bar"><p class="lightbox-caption"></p>' +
+        '<button class="btn btn-small btn-gold" type="button">बंद करें</button></div>';
+      document.body.appendChild(box);
+      const stop = function () { const v = box.querySelector('video'); v.pause(); v.removeAttribute('src'); v.load(); };
+      box.querySelector('button').addEventListener('click', function () { box.close(); });
+      box.addEventListener('click', function (e) { if (e.target === box) box.close(); });
+      box.addEventListener('close', stop);
+    }
+    const video = box.querySelector('video');
+    video.src = opener.getAttribute('data-video');
+    box.querySelector('.lightbox-caption').textContent = opener.getAttribute('data-caption') || '';
+    if (typeof box.showModal === 'function') box.showModal(); else box.setAttribute('open', '');
+    video.play().catch(function () { /* the viewer can press play */ });
   });
 });
 

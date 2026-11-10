@@ -26,6 +26,10 @@ const GH_TOKEN_KEY = 'chhathPuja.githubToken';
 const GH_LAST_PUBLISH_KEY = 'chhathPuja.lastPublish';
 const GALLERY_JSON_PATH = 'data/gallery.json';
 const GALLERY_IMAGE_FOLDER = 'images/gallery/';
+const GALLERY_VIDEO_FOLDER = 'videos/';
+const VIDEO_MAX_BYTES = 6 * 1024 * 1024;       // videos bigger than this are made smaller
+const VIDEO_TARGET_BYTES = 5.4 * 1024 * 1024;  // aim a little below 6 MB
+const VIDEO_MAX_SECONDS = 62;                   // 1 minute (with a small margin)
 
 /* --------------------------------------------------------------------------
    GITHUB API
@@ -247,6 +251,14 @@ function injectGithubStyles() {
     '.gal-controls label{display:flex;flex-direction:column;gap:.3rem;font-weight:600;font-size:.95rem;}',
     '.gal-controls input{width:100%;accent-color:var(--sindoor);}',
     '@media (max-width:640px){.gal-controls{grid-template-columns:1fr;}}',
+    '.gal-video{display:flex;flex-wrap:wrap;gap:1rem;align-items:flex-start;margin-bottom:1rem;}',
+    '.gal-video video{width:260px;max-width:100%;max-height:260px;border-radius:12px;background:#000;}',
+    '.gal-video-side{flex:1;min-width:200px;}',
+    '.gal-video-info{font-weight:600;margin:0 0 .5rem;}',
+    '.gal-progress{height:12px;border-radius:999px;background:var(--paper-deep);overflow:hidden;margin-bottom:.75rem;}',
+    '.gal-progress span{display:block;height:100%;width:0;background:var(--sindoor);transition:width .2s;}',
+    '.gal-cover-note{margin:.25rem 0 .75rem;}',
+    '.gal-play-badge{position:absolute;left:8px;top:8px;z-index:1;padding:2px 10px;border-radius:999px;background:rgba(0,0,0,.65);color:#fff;font-size:.8rem;font-weight:600;}',
     '@media (max-width:960px){.gallery-admin-form{grid-template-columns:1fr 1fr;}}',
     '@media (max-width:640px){.gallery-admin-form{grid-template-columns:1fr;}}'
   ].join('\n');
@@ -463,7 +475,7 @@ async function renderGalleryAdmin() {
     '<h2>गैलरी फ़ोटो</h2>' +
     '<p class="field-hint">यहाँ से जोड़ी गई फ़ोटो होम पेज की गैलरी में सबसे आख़िर में दिखेंगी (3–10 मिनट बाद)।</p>' +
     '<form class="gallery-admin-form" id="galleryForm" novalidate>' +
-      '<div class="field"><label for="galleryFile">फ़ोटो चुनें</label><input id="galleryFile" type="file" accept="image/*"></div>' +
+      '<div class="field"><label for="galleryFile">फ़ोटो या वीडियो चुनें</label><input id="galleryFile" type="file" accept="image/*,video/*"></div>' +
       '<div class="field"><label for="galleryCaption">फ़ोटो का नाम / विवरण</label><input id="galleryCaption" type="text" maxlength="80" placeholder="जैसे: संध्या अर्घ्य 2026"></div>' +
       '<div class="field"><label for="gallerySize">आकार</label><select id="gallerySize">' +
         '<option value="">सामान्य</option><option value="wide">चौड़ी (2 खाने)</option><option value="tall">लंबी (2 खाने ऊँची)</option>' +
@@ -472,6 +484,14 @@ async function renderGalleryAdmin() {
     '</form>' +
     '<div class="gal-editor" id="galEditor" hidden>' +
       '<p class="gal-editor-title" id="galEditorTitle">फ़ोटो ठीक से सेट करें</p>' +
+      '<div class="gal-video" id="galVideo" hidden>' +
+        '<video id="galVideoPreview" controls playsinline preload="metadata"></video>' +
+        '<div class="gal-video-side"><p class="gal-video-info" id="galVideoInfo"></p>' +
+        '<div class="gal-progress" id="galProgress" hidden><span id="galProgressBar"></span></div>' +
+        '<button class="btn btn-primary btn-small" id="galCompressBtn" type="button" hidden>वीडियो छोटा करें</button>' +
+        '<p class="field-hint" id="galVideoHint"></p></div>' +
+      '</div>' +
+      '<p class="field-hint gal-cover-note" id="galCoverNote" hidden>नीचे वीडियो की <strong>कवर फ़ोटो</strong> है, जो गैलरी में ▶ के साथ दिखेगी। इसे ज़ूम और सरका सकते हैं।</p>' +
       '<div class="gal-previews">' +
         '<figure><div class="gal-frame" id="galFrameDesk"><img alt="कंप्यूटर पर झलक" draggable="false"></div><figcaption>कंप्यूटर पर ऐसी दिखेगी</figcaption></figure>' +
         '<figure><div class="gal-frame" id="galFramePhone"><img alt="फ़ोन पर झलक" draggable="false"></div><figcaption>फ़ोन पर ऐसी दिखेगी</figcaption></figure>' +
@@ -507,6 +527,7 @@ async function renderGalleryAdmin() {
     drawGalleryPreview();
   });
   document.getElementById('galCancel').addEventListener('click', closeGalleryEditor);
+  document.getElementById('galCompressBtn').addEventListener('click', startVideoCompression);
   ['galFrameDesk', 'galFramePhone'].forEach(enableGalleryDrag);
   document.getElementById('galleryList').addEventListener('click', function (event) {
     const remove = event.target.closest('button[data-remove]');
@@ -565,6 +586,7 @@ function enableGalleryDrag(frameId) {
 async function chooseGalleryFile(event) {
   const file = event.target.files[0];
   if (!file) { closeGalleryEditor(); return; }
+  if (/^video\//.test(file.type)) { chooseGalleryVideo(file, event.target); return; }
   setGalleryStatus('फ़ोटो तैयार हो रही है…');
   try {
     const dataURL = await compressBillImage(file);        // from kharcha.js
@@ -582,7 +604,7 @@ async function openGalleryEdit(id) {
   const photo = list.find(function (p) { return p.id === id; });
   if (!photo) return;
   galleryEdit = {
-    mode: 'edit', id: id, src: galleryImageURL(photo.src),
+    mode: 'edit', id: id, kind: photo.kind || 'photo', src: galleryImageURL(photo.src),
     fx: photo.fx === undefined ? 50 : photo.fx, fy: photo.fy === undefined ? 50 : photo.fy, zoom: photo.zoom || 1
   };
   document.getElementById('galleryCaption').value = photo.caption || '';
@@ -593,6 +615,9 @@ async function openGalleryEdit(id) {
 }
 
 function openGalleryEditor(title, buttonText) {
+  const isVideo = !!(galleryEdit && galleryEdit.kind === 'video');
+  document.getElementById('galVideo').hidden = !(isVideo && galleryEdit.mode === 'new');
+  document.getElementById('galCoverNote').hidden = !isVideo;
   document.getElementById('galEditorTitle').textContent = title;
   document.getElementById('galleryAddBtn').textContent = buttonText;
   document.getElementById('galEditor').hidden = false;
@@ -601,6 +626,9 @@ function openGalleryEditor(title, buttonText) {
 }
 
 function closeGalleryEditor() {
+  if (galleryEdit && galleryEdit.url) URL.revokeObjectURL(galleryEdit.url);
+  const preview = document.getElementById('galVideoPreview');
+  if (preview) { preview.pause(); preview.removeAttribute('src'); preview.load(); }
   galleryEdit = null;
   const form = document.getElementById('galleryForm');
   if (form) form.reset();
@@ -616,7 +644,7 @@ async function refreshGalleryList() {
     listBox.innerHTML = list.length ? list.map(function (photo) {
       const fx = photo.fx === undefined ? 50 : photo.fx, fy = photo.fy === undefined ? 50 : photo.fy;
       return '<figure class="gallery-admin-item">' +
-        '<div style="height:120px;overflow:hidden;background:var(--paper-deep)"><img src="' + escapeHTML(galleryImageURL(photo.src)) + '" alt="' + escapeHTML(photo.caption || 'फ़ोटो') + '" loading="lazy" style="width:100%;height:100%;' + galleryImageStyle(fx, fy, photo.zoom || 1) + '"></div>' +
+        '<div style="position:relative;height:120px;overflow:hidden;background:var(--paper-deep)">' + (photo.kind === 'video' ? '<span class="gal-play-badge">▶ वीडियो</span>' : '') + '<img src="' + escapeHTML(galleryImageURL(photo.src)) + '" alt="' + escapeHTML(photo.caption || 'फ़ोटो') + '" loading="lazy" style="width:100%;height:100%;' + galleryImageStyle(fx, fy, photo.zoom || 1) + '"></div>' +
         '<figcaption>' + escapeHTML(photo.caption || '–') + '</figcaption>' +
         '<div style="display:flex;gap:.4rem;padding:0 .6rem .6rem"><button class="btn btn-outline btn-small" type="button" data-edit="' + escapeHTML(photo.id) + '">बदलें</button>' +
         '<button class="btn btn-danger btn-small" type="button" data-remove="' + escapeHTML(photo.id) + '">हटाएँ</button></div>' +
@@ -655,6 +683,20 @@ async function saveGalleryPhoto(event) {
       await ghCommitFiles([{ path: GALLERY_JSON_PATH, content: JSON.stringify(list, null, 2) + '\n' }],
         'Admin panel: गैलरी फ़ोटो बदली' + (caption ? ' — ' + caption : ''));
       setGalleryStatus('✓ बदलाव सेव हो गया। 3–10 मिनट में होम पेज पर दिखेगा।', 'ok');
+    } else if (galleryEdit.kind === 'video') {
+      if (!galleryEdit.videoBlob) throw new Error('पहले "वीडियो छोटा करें" दबाएँ।');
+      const id = 'video-' + Date.now().toString(36);
+      const posterPath = GALLERY_IMAGE_FOLDER + id + '.jpg';
+      const videoPath = GALLERY_VIDEO_FOLDER + id + '.' + galleryEdit.videoExt;
+      setGalleryStatus('वीडियो GitHub पर सेव हो रहा है… (1–2 मिनट लग सकते हैं)');
+      const videoBase64 = await blobToBase64(galleryEdit.videoBlob);
+      list.push(Object.assign({ id: id, kind: 'video', src: posterPath, video: videoPath, caption: caption, size: size, added: todayISO() }, look));
+      await ghCommitFiles([
+        { path: videoPath, content: videoBase64, encoding: 'base64' },
+        { path: posterPath, content: galleryEdit.src.split(',')[1], encoding: 'base64' },
+        { path: GALLERY_JSON_PATH, content: JSON.stringify(list, null, 2) + '\n' }
+      ], 'Admin panel: गैलरी वीडियो जोड़ा' + (caption ? ' — ' + caption : ''));
+      setGalleryStatus('✓ वीडियो जुड़ गया। 3–10 मिनट में होम पेज की गैलरी में दिखेगा।', 'ok');
     } else {
       const id = 'photo-' + Date.now().toString(36);
       const path = GALLERY_IMAGE_FOLDER + id + '.jpg';
@@ -688,6 +730,7 @@ async function removeGalleryPhoto(id) {
     const remaining = list.filter(function (p) { return p.id !== id; });
     const files = [{ path: GALLERY_JSON_PATH, content: JSON.stringify(remaining, null, 2) + '\n' }];
     if (photo && photo.src && photo.src.indexOf(GALLERY_IMAGE_FOLDER) === 0) files.push({ path: photo.src, remove: true });
+    if (photo && photo.video && photo.video.indexOf(GALLERY_VIDEO_FOLDER) === 0) files.push({ path: photo.video, remove: true });
     await ghCommitFiles(files, 'Admin panel: गैलरी फ़ोटो हटाई');
     setGalleryStatus('✓ फ़ोटो हटा दी गई। 3–10 मिनट में वेबसाइट से हट जाएगी।', 'ok');
     if (galleryEdit && galleryEdit.id === id) closeGalleryEditor();
@@ -698,6 +741,196 @@ async function removeGalleryPhoto(id) {
   } finally {
     ghBusy = false;
   }
+}
+
+/* --------------------------------------------------------------------------
+   GALLERY VIDEOS (up to 1 minute). Bigger than 6 MB? Made smaller on the
+   phone itself before uploading: the video is played into a smaller frame
+   and recorded again at a lower quality.
+   -------------------------------------------------------------------------- */
+function formatMB(bytes) {
+  return (bytes / (1024 * 1024)).toFixed(1) + ' MB';
+}
+
+function blobToBase64(blob) {
+  return new Promise(function (resolve, reject) {
+    const reader = new FileReader();
+    reader.onload = function () { resolve(String(reader.result).split(',')[1]); };
+    reader.onerror = function () { reject(new Error('वीडियो पढ़ा नहीं जा सका।')); };
+    reader.readAsDataURL(blob);
+  });
+}
+
+/** Duration, size and a cover photo taken from the video. */
+function readVideoInfo(file) {
+  return new Promise(function (resolve, reject) {
+    const url = URL.createObjectURL(file);
+    const v = document.createElement('video');
+    let done = false;
+    v.preload = 'auto';
+    v.muted = true;
+    v.playsInline = true;
+    v.onloadedmetadata = function () {
+      v.currentTime = Math.min(1, (v.duration || 2) / 3);
+    };
+    v.onseeked = function () {
+      if (done) return;
+      done = true;
+      const scale = Math.min(1, 1400 / Math.max(v.videoWidth, v.videoHeight));
+      const canvas = document.createElement('canvas');
+      canvas.width = Math.max(1, Math.round(v.videoWidth * scale));
+      canvas.height = Math.max(1, Math.round(v.videoHeight * scale));
+      canvas.getContext('2d').drawImage(v, 0, 0, canvas.width, canvas.height);
+      resolve({ url: url, duration: v.duration, width: v.videoWidth, height: v.videoHeight, poster: canvas.toDataURL('image/jpeg', 0.8) });
+    };
+    v.onerror = function () {
+      URL.revokeObjectURL(url);
+      reject(new Error('यह वीडियो इस ब्राउज़र में नहीं खुल रहा। फ़ोन के कैमरा से बना MP4 वीडियो चुनें।'));
+    };
+    v.src = url;
+  });
+}
+
+function videoExtension(type) {
+  return /mp4/.test(type) ? 'mp4' : 'webm';
+}
+
+/** The best recording format this phone supports (MP4 plays everywhere, WebM is the fallback). */
+function recorderType() {
+  const options = ['video/mp4;codecs=avc1.42E01E,mp4a.40.2', 'video/mp4', 'video/webm;codecs=vp8,opus', 'video/webm'];
+  if (typeof MediaRecorder === 'undefined') return '';
+  return options.find(function (t) { return MediaRecorder.isTypeSupported(t); }) || '';
+}
+
+async function chooseGalleryVideo(file, input) {
+  setGalleryStatus('वीडियो जाँचा जा रहा है…');
+  try {
+    const info = await readVideoInfo(file);
+    if (info.duration > VIDEO_MAX_SECONDS) {
+      URL.revokeObjectURL(info.url);
+      input.value = '';
+      setGalleryStatus('यह वीडियो ' + Math.round(info.duration) + ' सेकंड का है। 1 मिनट तक का वीडियो चुनें (फ़ोन की Gallery → Edit → Trim से छोटा कर सकते हैं)।', 'error');
+      return;
+    }
+    const small = file.size <= VIDEO_MAX_BYTES && /mp4|webm/.test(file.type);
+    galleryEdit = {
+      mode: 'new', kind: 'video', src: info.poster, fx: 50, fy: 50, zoom: 1,
+      url: info.url, duration: info.duration, width: info.width, height: info.height,
+      videoBlob: small ? file : null, videoExt: small ? videoExtension(file.type) : ''
+    };
+    const preview = document.getElementById('galVideoPreview');
+    preview.src = info.url;
+    openGalleryEditor('नया वीडियो: ठीक से सेट करें, फिर "वीडियो जोड़ें" दबाएँ', 'वीडियो जोड़ें');
+    const infoText = document.getElementById('galVideoInfo');
+    const button = document.getElementById('galCompressBtn');
+    const hint = document.getElementById('galVideoHint');
+    infoText.textContent = 'वीडियो: ' + Math.round(info.duration) + ' सेकंड, ' + formatMB(file.size);
+    if (small) {
+      button.hidden = true;
+      hint.textContent = '✓ वीडियो 6 MB से छोटा है, सीधे जोड़ा जा सकता है।';
+    } else if (!recorderType()) {
+      button.hidden = true;
+      galleryEdit.videoBlob = null;
+      hint.textContent = 'यह ब्राउज़र वीडियो छोटा नहीं कर सकता। फ़ोन के Chrome में खोलें, या छोटा (6 MB से कम) वीडियो चुनें।';
+    } else {
+      button.hidden = false;
+      hint.textContent = 'वीडियो 6 MB से बड़ा है। "वीडियो छोटा करें" दबाएँ। इसमें लगभग ' + Math.ceil(info.duration) + ' सेकंड लगेंगे; तब तक फ़ोन लॉक न करें और यही पेज खुला रखें।';
+    }
+    setGalleryStatus('');
+  } catch (error) {
+    input.value = '';
+    setGalleryStatus(error.message, 'error');
+  }
+}
+
+async function startVideoCompression() {
+  if (!galleryEdit || galleryEdit.kind !== 'video') return;
+  const button = document.getElementById('galCompressBtn');
+  const hint = document.getElementById('galVideoHint');
+  const progress = document.getElementById('galProgress');
+  const bar = document.getElementById('galProgressBar');
+  button.disabled = true;
+  progress.hidden = false;
+  hint.textContent = 'वीडियो छोटा हो रहा है… फ़ोन लॉक न करें।';
+  try {
+    const blob = await compressVideo(galleryEdit, function (p) {
+      bar.style.width = Math.round(p * 100) + '%';
+    });
+    if (blob.size > VIDEO_MAX_BYTES) {
+      throw new Error('छोटा करने के बाद भी वीडियो ' + formatMB(blob.size) + ' है। वीडियो को Trim करके छोटा करें और फिर कोशिश करें।');
+    }
+    galleryEdit.videoBlob = blob;
+    galleryEdit.videoExt = videoExtension(blob.type);
+    const preview = document.getElementById('galVideoPreview');
+    preview.src = URL.createObjectURL(blob);
+    bar.style.width = '100%';
+    button.hidden = true;
+    hint.textContent = '✓ तैयार: ' + formatMB(blob.size) + '। ऊपर चलाकर देख लें, फिर "वीडियो जोड़ें" दबाएँ।';
+  } catch (error) {
+    console.error(error);
+    hint.textContent = error.message || 'वीडियो छोटा नहीं हो पाया।';
+    button.disabled = false;
+  }
+}
+
+/** Plays the video into a smaller frame and records it again at a bitrate that fits ~5.4 MB. */
+async function compressVideo(edit, onProgress) {
+  const type = recorderType();
+  const v = document.createElement('video');
+  v.playsInline = true;
+  v.preload = 'auto';
+  v.src = edit.url;
+  await new Promise(function (resolve, reject) {
+    v.onloadedmetadata = resolve;
+    v.onerror = function () { reject(new Error('वीडियो खुल नहीं पाया।')); };
+  });
+
+  const scale = Math.min(1, 960 / Math.max(v.videoWidth, v.videoHeight));
+  const canvas = document.createElement('canvas');
+  canvas.width = Math.max(2, Math.round(v.videoWidth * scale / 2) * 2);
+  canvas.height = Math.max(2, Math.round(v.videoHeight * scale / 2) * 2);
+  const ctx = canvas.getContext('2d');
+  const stream = canvas.captureStream(30);
+
+  // Sound: routed into the recording only (nothing plays from the speaker)
+  let audio = null;
+  try {
+    const AudioCtx = window.AudioContext || window.webkitAudioContext;
+    audio = new AudioCtx();
+    const source = audio.createMediaElementSource(v);
+    const dest = audio.createMediaStreamDestination();
+    source.connect(dest);
+    dest.stream.getAudioTracks().forEach(function (track) { stream.addTrack(track); });
+  } catch (error) {
+    v.muted = true;
+  }
+
+  const audioBps = 64000;
+  const videoBps = Math.max(250000, Math.min(2500000, Math.floor(VIDEO_TARGET_BYTES * 8 / Math.max(edit.duration, 1)) - audioBps));
+  const recorder = new MediaRecorder(stream, { mimeType: type, videoBitsPerSecond: videoBps, audioBitsPerSecond: audioBps });
+  const chunks = [];
+  recorder.ondataavailable = function (e) { if (e.data && e.data.size) chunks.push(e.data); };
+  const stopped = new Promise(function (resolve) { recorder.onstop = resolve; });
+
+  let running = true;
+  const draw = function () {
+    if (!running) return;
+    ctx.drawImage(v, 0, 0, canvas.width, canvas.height);
+    onProgress(Math.min(1, v.currentTime / edit.duration));
+    if (v.requestVideoFrameCallback) v.requestVideoFrameCallback(draw);
+    else requestAnimationFrame(draw);
+  };
+
+  recorder.start(1000);
+  await v.play();
+  draw();
+  await new Promise(function (resolve) { v.onended = resolve; });
+  running = false;
+  recorder.stop();
+  await stopped;
+  stream.getTracks().forEach(function (track) { track.stop(); });
+  if (audio) audio.close();
+  return new Blob(chunks, { type: type.split(';')[0] });
 }
 
 /* --------------------------------------------------------------------------
