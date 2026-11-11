@@ -1,0 +1,57 @@
+{
+  "hero": {
+    "src": "images/hero-ghat.jpg"
+  },
+  "founders": [
+    {
+      "id": "f1",
+      "name": "Digambar Yadav",
+      "role": "संस्थापक",
+      "lead": true,
+      "src": "images/founder.jpg",
+      "fx": 50,
+      "fy": 25,
+      "zoom": 1
+    },
+    {
+      "id": "f2",
+      "name": "Gautam Goswami",
+      "role": "सह-संस्थापक",
+      "lead": false,
+      "src": "images/cofounder-1.JPG",
+      "fx": 25,
+      "fy": 20,
+      "zoom": 1
+    },
+    {
+      "id": "f3",
+      "name": "Kanhaiya kumar",
+      "role": "सह-संस्थापक",
+      "lead": false,
+      "src": "images/cofounder-2.jpeg",
+      "fx": 100,
+      "fy": 16,
+      "zoom": 1.05
+    },
+    {
+      "id": "f4",
+      "name": "Shivpujan yadav",
+      "role": "सह-संस्थापक",
+      "lead": false,
+      "src": "images/cofounder-3.jpeg",
+      "fx": 25,
+      "fy": 20,
+      "zoom": 1
+    },
+    {
+      "id": "f5",
+      "name": "Aniket yadav",
+      "role": "सह-संस्थापक",
+      "lead": false,
+      "src": "images/cofounder-4.jpeg?v=2",
+      "fx": 0,
+      "fy": 8,
+      "zoom": 1
+    }
+  ]
+}
