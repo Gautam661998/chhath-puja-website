@@ -52,6 +52,26 @@
       "fx": 0,
       "fy": 8,
       "zoom": 1
+    },
+    {
+      "id": "fmwbl7guo",
+      "name": "Deepak Kumar",
+      "role": "Public",
+      "lead": false,
+      "src": "images/site/founder-fmwbl7guo-mwblasof.jpg",
+      "fx": 50,
+      "fy": 25,
+      "zoom": 1
+    },
+    {
+      "id": "fmwbl8f40",
+      "name": "Radhe shyam",
+      "role": "Public",
+      "lead": false,
+      "src": "images/site/founder-fmwbl8f40-mwblasog.jpg",
+      "fx": 50,
+      "fy": 25,
+      "zoom": 1
     }
   ]
 }
